@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+
+import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
 import 'package:tu_gym_routine/widgets/admin_custom_list_tile.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
-import 'widgets.dart';
+import '../views/views.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -18,29 +22,53 @@ class CustomDrawer extends StatelessWidget {
           color: const Color.fromARGB(255, 34, 34, 34),
         ),
         SizedBox(
-            child: Column(
-          children: [
-            AdminCustomListTile(
-                title: 'Agregar usuarios',
-                icon: Icons.add_reaction_rounded,
-                onTap: () {}),
-            AdminCustomListTile(
-                title: 'Eliminar usuarios', icon: Icons.delete, onTap: () {Navigator.pushNamed(context, '/admin', arguments: {'page': 'delete'});}),
-            AdminCustomListTile(
-                title: 'Ver lista de usuarios',
-                icon: Icons.account_circle_rounded,
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/userlist');
-                }),
-            AdminCustomListTile(
-                title: 'Agregar ejercicio', icon: Icons.check, onTap: () {}),
-            AdminCustomListTile(
-                title: 'Eliminar ejercicio', icon: Icons.cancel, onTap: () {}),
-            AdminCustomListTile(
-                title: 'Ver lista de ejercicios',
-                icon: Icons.list,
-                onTap: () {}),
-          ],
+          child: BlocBuilder<AdminBloc, AdminState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                AdminCustomListTile(
+                    title: 'Agregar usuarios',
+                    icon: Icons.add_reaction_rounded,
+                    onTap: () {
+                      state.page = const AddUserView();
+                      context.read<AdminBloc>().add(ChangeViewEvent());
+                    }),
+                AdminCustomListTile(
+                    title: 'Eliminar usuarios',
+                    icon: Icons.delete,
+                    onTap: () {
+                      state.page = const DeleteUserView();
+                      context.read<AdminBloc>().add(ChangeViewEvent());
+                    }),
+                AdminCustomListTile(
+                    title: 'Ver lista de usuarios',
+                    icon: Icons.account_circle_rounded,
+                    onTap: () {
+                      state.page = const DeleteUserView();
+                      context.read<AdminBloc>().add(ChangeViewEvent());
+                    }),
+                AdminCustomListTile(
+                    title: 'Agregar ejercicio',
+                    icon: Icons.check,
+                    onTap: () {
+                      state.page = const DeleteUserView();
+                      context.read<AdminBloc>().add(ChangeViewEvent());
+                    }),
+                AdminCustomListTile(
+                    title: 'Eliminar ejercicio',
+                    icon: Icons.cancel,
+                    onTap: () {
+                      state.page = const DeleteUserView();
+                    }),
+                AdminCustomListTile(
+                    title: 'Ver lista de ejercicios',
+                    icon: Icons.list,
+                    onTap: () {
+                                            context.read<AdminBloc>().add(ChangeViewEvent());
+                    }),
+              ],
+            );
+          },
         )),
         Expanded(
             child: Container(color: const Color.fromARGB(255, 34, 34, 34))),
