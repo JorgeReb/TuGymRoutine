@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "536896610923",
+    "project_id": "tugymroutine",
+    "storage_bucket": "tugymroutine.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536896610923:android:323c55fb84af478a66c72e",
+        "android_client_info": {
+          "package_name": "com.example.tu_gym_routine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLRHZTZ_yaojfSXPFYMnYN0lni_LgHoe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
