@@ -4,11 +4,11 @@ import 'package:animate_do/animate_do.dart';
 class CustomAlertDialog extends StatelessWidget {
   final Icon icon;
   final Text text;
-  final TextButton textButton;
   final Color color;
+  final TextButton textButton;
 
 
-  const CustomAlertDialog({super.key, required this.icon, required this.text, required this.textButton, required this.color});
+  const CustomAlertDialog({super.key, required this.icon, required this.text, required this.color, required this.textButton});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,7 @@ class CustomAlertDialog extends StatelessWidget {
               children: [
                 text,
                 const SizedBox(height: 10,),
-                Divider(
-                  color: color,
-                )
+                Divider(color: color)
               ],
             )
           ),
@@ -35,11 +33,21 @@ class CustomAlertDialog extends StatelessWidget {
             const EdgeInsets.only(top: 12, left: 5, right: 5, bottom: 0),
             iconPadding: const EdgeInsets.only(bottom: 10, top: 12),
         actions: [
-          Center(
-            child: textButton
-          ),
+          Center(child: textButton),
         ],
       ),
+    );
+  }
+
+  Future<void> showCustomDialog(BuildContext context) {
+        return showDialog(
+        context: context,
+        builder: (_) => CustomAlertDialog(
+          color: color,
+          icon: icon,
+          text: text,
+          textButton: textButton,
+        ),
     );
   }
 }

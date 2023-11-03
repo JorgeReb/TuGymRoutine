@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/validations/fields_validations.dart';
 
-import '../services/firebase_service.dart';
 import '../widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
@@ -19,10 +20,6 @@ class LoginPage extends StatelessWidget {
           Container(
             height: 650,
             margin: const EdgeInsets.only(top: 20, left: 50, right: 50),
-            // decoration: BoxDecoration(
-            //   border: Border.all(width: 3.0),
-            //   borderRadius: const BorderRadius.all(Radius.circular(10)),
-            // ),
             child: const _LoginForm(),
           ),
         ]),
@@ -39,6 +36,8 @@ class _LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<_LoginForm> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   GlobalKey<FormState> loginFormKey = GlobalKey();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
@@ -69,78 +68,70 @@ class _LoginFormState extends State<_LoginForm> {
           const SizedBox(height: 40),
           ElevatedButton(
               onPressed: () async {
-                //pasar como admin
-                if(emailCtrl.text.trim() == 'Administrador' && passwordCtrl.text == '123'){
+                //*pasar como admin
+                if (emailCtrl.text.trim() == '' && passwordCtrl.text == '') {
                   Navigator.pushReplacementNamed(context, "/admin", arguments: {'usuario': emailCtrl.text});
                 }
-                if (loginFormKey.currentState!.validate()) {
-                  final usuarios = await getUsers();
-                  bool isRegistered = false;
-
-                  for (var usuario in usuarios) {
-                    if (usuario['email'] == emailCtrl.text && usuario['password'] == passwordCtrl.text) {
-                      isRegistered = true;
-                      break;
-                    } else {
-                      isRegistered = false;
-                    }
-                  }
-                  if (isRegistered == true) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.pushNamed(context, "/home");
-                  } else {
-                    // ignore: use_build_context_synchronously
-                    return showCustomDialog(
-                      context,
-                      Colors.redAccent.withOpacity(0.7),
-                      Icon(Icons.warning_amber_rounded,color: Colors.redAccent.withOpacity(0.7)),
-                      const Text("Los datos introducidos no concuerdan con niguna cuenta existente.",style: TextStyle(color: Colors.white),textAlign: TextAlign.center),
-                      TextButton(child: Text("Volver",style: TextStyle(color: Colors.redAccent.withOpacity(0.7)),),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                      }));
-                  }
-                }
+                if (loginFormKey.currentState!.validate()) await loginUser();
               },
-            child: const Text('Iniciar sesión')
-          ),
+              child: const Text('Iniciar sesión')),
           const SizedBox(height: 20),
-          OutlinedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/register");
-            },
-            style: const ButtonStyle(
-              side: MaterialStatePropertyAll(BorderSide.none),
-            ),
-            child: const Text(
-              '¿No tienes cuenta? Regístrate',
-              style: TextStyle(
-                decoration: TextDecoration.underline,
-                color: Colors.white70,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          const Expanded(
-            child: CustomFooter(),
-          ),
+          const NavigateToRegisterButton(),
+          const SizedBox(height: 40),
+          const Expanded(child: CustomFooter()),
         ],
       ),
     );
   }
 
-  Future<void> showCustomDialog(
-      BuildContext context, color, icon, text, textButton) {
-    return showDialog(
-      context: context,
-      builder: (_) => CustomAlertDialog(
-        color: color,
-        icon: icon,
-        text: text,
-        textButton: textButton,
-      ),
-    );
+  Future<void> loginUser() async {
+    try {
+      await auth.signInWithEmailAndPassword(email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, '/home');
+    } on FirebaseAuthException catch (e) {
+        switch(e.code){
+          case "wrong-password":
+            // ignore: use_build_context_synchronously
+            CustomAlertDialog(
+              icon: alertIcon,
+              text: invalidPasswordText,
+              color: alertColor,
+              textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+            ).showCustomDialog(context);
+          break;
+          case "user-not-found":
+          // ignore: use_build_context_synchronously
+            CustomAlertDialog(
+              icon: alertIcon,
+              text: invalidEmailText,
+              color: alertColor,
+              textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+            ).showCustomDialog(context);
+          break;
+          case "too-many-requests":
+          // ignore: use_build_context_synchronously
+            CustomAlertDialog(
+              icon: alertIcon,
+              text: userDiabledText,
+              color: alertColor,
+              textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+            ).showCustomDialog(context);
+          break;
+          case "INVALID_LOGIN_CREDENTIALS":
+          // ignore: use_build_context_synchronously
+            CustomAlertDialog(
+              icon: alertIcon,
+              text: invalidEmailText,
+              color: alertColor,
+              textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+            ).showCustomDialog(context);
+          break;
+        }
+    }
   }
 }

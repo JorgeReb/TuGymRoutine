@@ -20,7 +20,7 @@ class AdminCustomListTile extends StatelessWidget {
           ),
           textAlign: TextAlign.left),
       leading:
-          Icon(icon, color: Colors.white, size: 20),
+        Icon(icon, color: Colors.white, size: 20),
     );
   }
 }

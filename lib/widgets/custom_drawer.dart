@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
 import 'package:tu_gym_routine/widgets/admin_custom_list_tile.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
@@ -17,10 +16,7 @@ class CustomDrawer extends StatelessWidget {
       child: Column(children: [
         const _Image(),
         const _AdminText(),
-        Container(
-          height: 20,
-          color: const Color.fromARGB(255, 34, 34, 34),
-        ),
+        Container(height: 20,color: const Color.fromARGB(255, 34, 34, 34)),
         SizedBox(
           child: BlocBuilder<AdminBloc, AdminState>(
           builder: (context, state) {
@@ -44,7 +40,7 @@ class CustomDrawer extends StatelessWidget {
                     title: 'Ver lista de usuarios',
                     icon: Icons.account_circle_rounded,
                     onTap: () {
-                      state.page = const DeleteUserView();
+                      state.page = const ListUserView();
                       context.read<AdminBloc>().add(ChangeViewEvent());
                     }),
                 AdminCustomListTile(
@@ -64,19 +60,19 @@ class CustomDrawer extends StatelessWidget {
                     title: 'Ver lista de ejercicios',
                     icon: Icons.list,
                     onTap: () {
-                                            context.read<AdminBloc>().add(ChangeViewEvent());
+                    context.read<AdminBloc>().add(ChangeViewEvent());
                     }),
               ],
             );
           },
         )),
-        Expanded(
-            child: Container(color: const Color.fromARGB(255, 34, 34, 34))),
+        Expanded(child: Container(color: const Color.fromARGB(255, 34, 34, 34))),
         const _BotonSalir()
       ]),
     );
   }
 }
+
 
 class _AdminText extends StatelessWidget {
   const _AdminText();
@@ -129,9 +125,7 @@ class _BotonSalir extends StatelessWidget {
       color: Colors.redAccent,
       child: ListTile(
         tileColor: const Color.fromARGB(255, 34, 34, 34),
-        onTap: () {
-          Navigator.pushReplacementNamed(context, '/');
-        },
+        onTap: () => Navigator.pushReplacementNamed(context, '/'),
         title: const Text('Salir',
             style: TextStyle(
               color: Colors.white,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tu_gym_routine/pages/admin/user_list_page.dart';
 import 'firebase_options.dart';
 
 import 'package:tu_gym_routine/pages/pages.dart';
@@ -24,7 +23,6 @@ class MyApp extends StatelessWidget {
     '/register': (context) => const RegisterPage(),
     '/home': (context) => const HomePage(),
     '/admin' : (context) => const AdminPage(),
-    '/userlist' : (context) => const UserListPage()
   };
 
   @override

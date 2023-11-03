@@ -6,7 +6,7 @@ String? validateEmail(String? value) {
     if (value!.isEmpty) {
       return "El correo es obligatorio";
     } else if (!regExp.hasMatch(value)) {
-      return "Correo invalido";
+      return "Correo inválido";
     } else {
       return null;
     }

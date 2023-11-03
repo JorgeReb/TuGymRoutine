@@ -1,51 +1,51 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tu_gym_routine/services/user_service.dart';
 
-import 'package:tu_gym_routine/services/firebase_service.dart';
-
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
-    return const Home();
-  }
-}
+    final User? usuario = FirebaseAuth.instance.currentUser;
+    String? email = "";
 
-class Home extends StatefulWidget {
-  const Home({
-    super.key,
-  });
+    if (usuario != null) {
+      email = usuario.email;
+    }
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getUsers(),
-      builder: (context, snapshot) {
-        print(snapshot.data);
-        if(snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data?.length,
-            itemBuilder: (context, index) {
-              return Text(snapshot.data?[index]['name']);
-              
-            }, 
-          );
-        }else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            Text(email!),
+            FutureBuilder(
+              future: UserService().getUsers(),
+              builder: (context, snapshot) {             
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, index) {
+                      return Text(snapshot.data?[index]['name']);
+                    },
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                },
+                child: const Text('salir'))
+          ],
+        ),
+      ),
     );
   }
 }

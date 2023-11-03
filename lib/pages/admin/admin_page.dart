@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
-import 'package:tu_gym_routine/views/delete_user_view.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
 class AdminPage extends StatelessWidget {

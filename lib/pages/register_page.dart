@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tu_gym_routine/services/firebase_service.dart';
+import 'package:tu_gym_routine/constants/constants.dart';
+
+import 'package:tu_gym_routine/services/user_service.dart';
 import '../validations/fields_validations.dart';
 import '../widgets/widgets.dart';
 
@@ -18,10 +21,6 @@ class RegisterPage extends StatelessWidget {
           Container(
             height: 650,
             margin: const EdgeInsets.only(top: 20, left: 50, right: 50),
-            // decoration: BoxDecoration(
-            //   border: Border.all(width: 3.0),
-            //   borderRadius: const BorderRadius.all(Radius.circular(10)),
-            // ),
             child: const _RegisterForm(),
           ),
         ]),
@@ -38,6 +37,8 @@ class _RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<_RegisterForm> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   GlobalKey<FormState> registerFormKey = GlobalKey();
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
@@ -76,84 +77,60 @@ class _RegisterFormState extends State<_RegisterForm> {
           ),
           const SizedBox(height: 18),
           ElevatedButton(
-              onPressed: () async {
-                if (registerFormKey.currentState!.validate()) {
-                  final usuarios = await getUsers();
-                  bool isRegistered = false;
-                  for (var usuario in usuarios) {
-                    if (usuario['email'] == emailCtrl.text) {
-                      isRegistered = true;
-                      break;
-                    } else {
-                      isRegistered = false;
-                    }
-                  }
-                  if (isRegistered == true) {
-                    // ignore: use_build_context_synchronously
-                    return showCustomDialog(
-                      context,
-                      Colors.redAccent.withOpacity(0.7),
-                      Icon(Icons.warning_amber_rounded,color: Colors.redAccent.withOpacity(0.7)),
-                      const Text("Este correo ya ha sido registrado anteriormente.",style: TextStyle(color: Colors.white),textAlign: TextAlign.center),
-                      TextButton(child: Text("Volver",style: TextStyle(color: Colors.redAccent.withOpacity(0.7))),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    );
-                  } else {
-                    await addUser(
-                            emailCtrl.text, nameCtrl.text, passwordCtrl.text)
-                        .then((value) {
-                      return showCustomDialog(
-                          context,
-                          Colors.blueAccent,
-                          const Icon(Icons.check_circle_outline,color: Colors.blueAccent,),
-                          const Text('Usted ha sido registrado correctamente en la aplicación',style: TextStyle(color: Colors.white),textAlign: TextAlign.center),
-                          TextButton(child: const Text("Aceptar",style: TextStyle(color: Colors.blueAccent),),
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/home');
-                          })
-                        );
-                    });
-                    setState(() {});
-                  }
+            onPressed: () async {
+              if (registerFormKey.currentState!.validate()) {
+                  await registerUser();
+                  setState(() {});
                 }
               },
-              child: const Text('Registrarse')),
+            child: const Text('Registrarse')
+          ),
           const SizedBox(height: 5),
-          OutlinedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/");
-            },
-            style: const ButtonStyle(
-                side: MaterialStatePropertyAll(BorderSide.none)),
-            child: const Text(
-              '¿Ya tienes cuenta?',
-              style: TextStyle(
-                decoration: TextDecoration.underline,
-                color: Colors.white70,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
+          const NavigateToLoginButton(),
+          const SizedBox(height: 40),
           const Expanded(child: CustomFooter()),
         ],
       ),
     );
   }
 
-  Future<void> showCustomDialog(
-      BuildContext context, color, icon, text, textButton) {
-    return showDialog(
-      context: context,
-      builder: (_) => CustomAlertDialog(
-        color: color,
-        icon: icon,
-        text: text,
-        textButton: textButton,
-      ),
-    );
+  Future<void> registerUser() async {
+    try {
+      UserService().addUser(emailCtrl.text.trim(),passwordCtrl.text.trim(),nameCtrl.text.trim())
+        .then((value) {
+        return CustomAlertDialog(
+          icon: successIcon,
+          text: succesTextRegister,
+          color: succesColor,
+          textButton: TextButton(child: aceptText,onPressed: () => Navigator.pushNamed(context, '/home'))
+        ).showCustomDialog(context);
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "weak-password") {
+        // ignore: use_build_context_synchronously
+        return CustomAlertDialog(
+          icon: alertIcon,
+          text: weakPasswordText,
+          color: alertColor,
+          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+        ).showCustomDialog(context);
+      } else if (e.code == "email-already-in-use") {
+        // ignore: use_build_context_synchronously
+        return CustomAlertDialog(
+          icon: alertIcon,
+          text: isRegisterdText,
+          color: alertColor,
+          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+          ).showCustomDialog(context);
+      } else {
+        // ignore: use_build_context_synchronously
+        return CustomAlertDialog(
+          icon: alertIcon,
+          text: alertTextRegister,
+          color: alertColor,
+          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+          ).showCustomDialog(context);
+      }
+    }
   }
 }
