@@ -1,7 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
 import 'package:tu_gym_routine/constants/constants.dart';
+import 'package:tu_gym_routine/pages/admin/admin_page.dart';
+import 'package:tu_gym_routine/pages/home_page.dart';
 import 'package:tu_gym_routine/validations/fields_validations.dart';
+import 'package:tu_gym_routine/views/add_admin_view.dart';
 
 import '../widgets/widgets.dart';
 
@@ -68,10 +73,6 @@ class _LoginFormState extends State<_LoginForm> {
           const SizedBox(height: 40),
           ElevatedButton(
               onPressed: () async {
-                //*pasar como admin
-                if (emailCtrl.text.trim() == '' && passwordCtrl.text == '') {
-                  Navigator.pushReplacementNamed(context, "/admin", arguments: {'usuario': emailCtrl.text});
-                }
                 if (loginFormKey.currentState!.validate()) await loginUser();
               },
               child: const Text('Iniciar sesión')),
@@ -86,52 +87,63 @@ class _LoginFormState extends State<_LoginForm> {
 
   Future<void> loginUser() async {
     try {
-      await auth.signInWithEmailAndPassword(email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, '/home');
-    } on FirebaseAuthException catch (e) {
-        switch(e.code){
-          case "wrong-password":
-            // ignore: use_build_context_synchronously
-            CustomAlertDialog(
-              icon: alertIcon,
-              text: invalidPasswordText,
-              color: alertColor,
-              textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
-            ).showCustomDialog(context);
-          break;
-          case "user-not-found":
-          // ignore: use_build_context_synchronously
-            CustomAlertDialog(
-              icon: alertIcon,
-              text: invalidEmailText,
-              color: alertColor,
-              textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
-            ).showCustomDialog(context);
-          break;
-          case "too-many-requests":
-          // ignore: use_build_context_synchronously
-            CustomAlertDialog(
-              icon: alertIcon,
-              text: userDiabledText,
-              color: alertColor,
-              textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
-            ).showCustomDialog(context);
-          break;
-          case "INVALID_LOGIN_CREDENTIALS":
-          // ignore: use_build_context_synchronously
-            CustomAlertDialog(
-              icon: alertIcon,
-              text: invalidEmailText,
-              color: alertColor,
-              textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
-            ).showCustomDialog(context);
-          break;
+      final authData = await auth.signInWithEmailAndPassword(email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
+      IdTokenResult result = await authData.user!.getIdTokenResult();
+      final isAdmin = result.claims!['admin'];
+
+      if (isAdmin == true) {
+        if(mounted){
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, "/admin",
+            arguments: {"token": result.token});
         }
+      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "wrong-password":
+          // ignore: use_build_context_synchronously
+          CustomAlertDialog(
+            icon: alertIcon,
+            text: invalidPasswordText,
+            color: alertColor,
+            textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+          ).showCustomDialog(context);
+          break;
+        case "user-not-found":
+          // ignore: use_build_context_synchronously
+          CustomAlertDialog(
+            icon: alertIcon,
+            text: invalidEmailText,
+            color: alertColor,
+            textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+          ).showCustomDialog(context);
+          break;
+        case "too-many-requests":
+          // ignore: use_build_context_synchronously
+          CustomAlertDialog(
+            icon: alertIcon,
+            text: userDiabledText,
+            color: alertColor,
+            textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+          ).showCustomDialog(context);
+          break;
+        case "INVALID_LOGIN_CREDENTIALS":
+          // ignore: use_build_context_synchronously
+          CustomAlertDialog(
+            icon: alertIcon,
+            text: invalidEmailText,
+            color: alertColor,
+            textButton: TextButton(
+                onPressed: () => Navigator.pop(context), child: cancelText),
+          ).showCustomDialog(context);
+          break;
+      }
     }
   }
 }

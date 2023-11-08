@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const Color primaryColor = Color.fromARGB(255,34,34,34);
+const Color secundaryColor = Colors.white;
+
 const Color alertColor = Colors.redAccent;
 const Icon alertIcon = Icon(Icons.warning_amber_rounded, color: alertColor);
 const Text cancelText = Text("Volver",style: TextStyle(color: alertColor));

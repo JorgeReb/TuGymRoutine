@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
     '/': (context) => const LoginPage(),
     '/register': (context) => const RegisterPage(),
     '/home': (context) => const HomePage(),
-    '/admin' : (context) => const AdminPage(),
+    '/admin' : (context) =>  const AdminPage(),
+    '/user' : (context) =>   UserPage(),
   };
 
   @override

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,38 +24,24 @@ class CustomDrawer extends StatelessWidget {
             return Column(
               children: [
                 AdminCustomListTile(
-                    title: 'Agregar usuarios',
-                    icon: Icons.add_reaction_rounded,
-                    onTap: () {
-                      state.page = const AddUserView();
-                      context.read<AdminBloc>().add(ChangeViewEvent());
-                    }),
-                AdminCustomListTile(
-                    title: 'Eliminar usuarios',
-                    icon: Icons.delete,
-                    onTap: () {
-                      state.page = const DeleteUserView();
-                      context.read<AdminBloc>().add(ChangeViewEvent());
-                    }),
-                AdminCustomListTile(
-                    title: 'Ver lista de usuarios',
+                    title: 'Lista de usuarios',
                     icon: Icons.account_circle_rounded,
                     onTap: () {
-                      state.page = const ListUserView();
+                      state.view = const ListUserView();
                       context.read<AdminBloc>().add(ChangeViewEvent());
                     }),
                 AdminCustomListTile(
                     title: 'Agregar ejercicio',
                     icon: Icons.check,
                     onTap: () {
-                      state.page = const DeleteUserView();
+                      state.view = const AddAdminView();
                       context.read<AdminBloc>().add(ChangeViewEvent());
                     }),
                 AdminCustomListTile(
                     title: 'Eliminar ejercicio',
                     icon: Icons.cancel,
                     onTap: () {
-                      state.page = const DeleteUserView();
+                      state.view = const AddAdminView();
                     }),
                 AdminCustomListTile(
                     title: 'Ver lista de ejercicios',
@@ -120,12 +107,15 @@ class _BotonSalir extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance;  
     return Container(
       height: 50,
       color: Colors.redAccent,
       child: ListTile(
         tileColor: const Color.fromARGB(255, 34, 34, 34),
-        onTap: () => Navigator.pushReplacementNamed(context, '/'),
+        onTap: () async{
+          await user.signOut().then((value) => Navigator.pushReplacementNamed(context, '/'));
+        },
         title: const Text('Salir',
             style: TextStyle(
               color: Colors.white,

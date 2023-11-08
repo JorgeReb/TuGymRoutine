@@ -19,28 +19,28 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             Text(email!),
-            FutureBuilder(
-              future: UserService().getUsers(),
-              builder: (context, snapshot) {             
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (context, index) {
-                      return Text(snapshot.data?[index]['name']);
-                    },
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
+            // FutureBuilder(
+            //   future: UserService().getUsers(),
+            //   builder: (context, snapshot) {             
+            //     if (snapshot.hasData) {
+            //       return ListView.builder(
+            //         itemCount: snapshot.data?.length,
+            //         itemBuilder: (context, index) {
+            //           return Text(snapshot.data?[index]['name']);
+            //         },
+            //       );
+            //     } else {
+            //       return const Center(
+            //         child: CircularProgressIndicator(),
+            //       );
+            //     }
+            //   },
+            // ),
             ElevatedButton(
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
                   // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, '/');
                 },
                 child: const Text('salir'))
           ],

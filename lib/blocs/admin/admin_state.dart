@@ -2,10 +2,12 @@ part of 'admin_bloc.dart';
 
 
 class AdminState {
-  Widget? page;
+  Widget? view;
+  String? token;
 
   AdminState({
-    required this.page
+    required this.view,
+    this.token
   });
 }
 

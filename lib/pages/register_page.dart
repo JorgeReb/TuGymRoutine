@@ -102,7 +102,7 @@ class _RegisterFormState extends State<_RegisterForm> {
           icon: successIcon,
           text: succesTextRegister,
           color: succesColor,
-          textButton: TextButton(child: aceptText,onPressed: () => Navigator.pushNamed(context, '/home'))
+          textButton: TextButton(child: aceptText,onPressed: () => Navigator.pushNamed(context, '/'))
         ).showCustomDialog(context);
       });
     } on FirebaseAuthException catch (e) {
