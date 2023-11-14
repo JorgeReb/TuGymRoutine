@@ -5,7 +5,6 @@ import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
 class AdminPage extends StatefulWidget {
-
   const AdminPage({super.key});
 
   @override
@@ -13,42 +12,48 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  final User? user = FirebaseAuth.instance.currentUser;  
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    Map? parameters = ModalRoute.of(context)?.settings.arguments as Map?;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => AdminBloc()
-        ),
-      ],
-      child: Scaffold(
+    return Scaffold(
       drawer: const CustomDrawer(),
       appBar: AppBar(
         title: const Text('Dashboard'),
         backgroundColor: const Color.fromARGB(255, 34, 34, 34),
         elevation: 10,
-        actions:  [
+        actions: [
           Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Text('${user!.email}', style: const TextStyle(fontSize: 15), textAlign: TextAlign.center,),
+            child: Text(
+              '${user!.email}',
+              style: const TextStyle(fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
           ),
-          const Padding(padding: EdgeInsets.symmetric(horizontal: 10),child: Icon(Icons.account_circle_rounded, size: 30,),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Icon(Icons.account_circle_rounded,size: 30),
           )
         ],
       ),
-      body: BlocBuilder<AdminBloc,AdminState>(
+      body: BlocBuilder<AdminBloc, AdminState>(
         builder: (context, adminState) {
-          adminState.token = parameters!['token'];
+          getToken().then((dynamic result){
+            String token = result.toString();
+            adminState.token = token;
+          });
           return adminState.view!;
         },
       ),
-             
       backgroundColor: const Color.fromARGB(255, 34, 34, 34),
-      )
     );
-    
+  }
+
+  Future<dynamic> getToken() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    IdTokenResult result = await auth.currentUser!.getIdTokenResult();
+    final token = result.token;
+    return token;
   }
 }

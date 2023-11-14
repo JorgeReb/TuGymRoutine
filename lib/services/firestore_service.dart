@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class FirestoreService {
-
   Future<List> getCollection(String collection) async {
     CollectionReference collectionReference = FirebaseFirestore.instance.collection(collection);
     QuerySnapshot query = await collectionReference.get();

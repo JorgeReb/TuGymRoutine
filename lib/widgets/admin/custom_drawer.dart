@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
-import 'package:tu_gym_routine/widgets/admin_custom_list_tile.dart';
+import 'package:tu_gym_routine/widgets/admin/admin_custom_list_tile.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
-import '../views/views.dart';
+import '../../views/views.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -27,27 +27,13 @@ class CustomDrawer extends StatelessWidget {
                     title: 'Lista de usuarios',
                     icon: Icons.account_circle_rounded,
                     onTap: () {
-                      state.view = const ListUserView();
-                      context.read<AdminBloc>().add(ChangeViewEvent());
+                      BlocProvider.of<AdminBloc>(context).add(ChangeViewEvent(view: const ListUserView()));
                     }),
                 AdminCustomListTile(
-                    title: 'Agregar ejercicio',
-                    icon: Icons.check,
-                    onTap: () {
-                      state.view = const AddAdminView();
-                      context.read<AdminBloc>().add(ChangeViewEvent());
-                    }),
-                AdminCustomListTile(
-                    title: 'Eliminar ejercicio',
-                    icon: Icons.cancel,
-                    onTap: () {
-                      state.view = const AddAdminView();
-                    }),
-                AdminCustomListTile(
-                    title: 'Ver lista de ejercicios',
+                    title: 'Lista de ejercicios',
                     icon: Icons.list,
                     onTap: () {
-                    context.read<AdminBloc>().add(ChangeViewEvent());
+                      context.read<AdminBloc>().add(ChangeViewEvent(view: const ListExerciseView()));
                     }),
               ],
             );

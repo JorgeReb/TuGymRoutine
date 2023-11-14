@@ -6,10 +6,9 @@ import 'package:tu_gym_routine/models/usuario.dart';
 class UserService {
   final dio = Dio();
 
-  CollectionReference collectionReferenceUser = FirebaseFirestore.instance
-      .collection('users'); //selecionamos la tabla de la bbdd
+  CollectionReference collectionReferenceUser = FirebaseFirestore.instance.collection('users'); //selecionamos la tabla de la bbdd
 
- getUsers() async {
+  getUsers() async {
     List<Usuario> users = [];
     QuerySnapshot queryUser = await collectionReferenceUser.get(); //obtenemos los registros que hay en esa coleccion
 
@@ -21,32 +20,55 @@ class UserService {
     return users;
   }
 
+  addUser(String email, String password, String name) async {
+    try {
+      final response = await dio.post('https://adduser-ycxk3qq6za-uc.a.run.app', data: {
+        "email": email,
+        "password": password,
+        "name": name,
+      });
+      return response.data;
+    } catch (e) {
+      return e;
+    }
+  }
+
   deleteUser(String uid) async {
-    final response = 
-    await dio.post('https://deleteuser-ycxk3qq6za-uc.a.run.app', data: {"uid": uid});
+    final response = await dio.post('https://deleteuser-ycxk3qq6za-uc.a.run.app', data: {"uid": uid});
+    return response.data;
+  }
+
+  updateUser(String uid, String email, String name) async {
+    await collectionReferenceUser.doc(uid).update({"email": email, "name": name});
+
+    final response = await dio.post('https://updateuser-ycxk3qq6za-uc.a.run.app',data: {
+      "uid": uid, "newEmail": email
+    });
+
     return response.data;
   }
 
   addAdminPrivileges(User user, String uid) async {
-    
-
-    final token = await user.getIdToken();  
+    final token = await user.getIdToken();
 
     dio.options.headers["authorization"] = "token $token";
-    final response = 
-      await dio.post('https://addadminprivileges-ycxk3qq6za-uc.a.run.app', data: {"uid": uid} , options: Options(headers: {
-        "authorization": "Bearer $token"
-    }));
+    final response = await dio.post('https://addadminprivileges-ycxk3qq6za-uc.a.run.app',
+        data: {"uid": uid},
+        options: Options(headers: {"authorization": "Bearer $token"}));
+
     return response.data;
   }
 
-  addUser(String email, String password, String name) async {
-    final response =
-    await dio.post('https://adduser-ycxk3qq6za-uc.a.run.app', data: {
-      "email": email,
-      "password": password,
-      "name": name,
-    });
+  removeAdminPrivileges(
+    User user, String uid, String email, String name) async {
+      final token = await user.getIdToken();
+
+      dio.options.headers["authorization"] = "token $token";
+
+      final response = await dio.post('https://removeadminprivileges-ycxk3qq6za-uc.a.run.app',
+          data: {"uid": uid, "email": email, "name": name},
+          options: Options(headers: {"authorization": "Bearer $token"}));
+
     return response.data;
   }
 }

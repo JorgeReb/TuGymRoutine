@@ -8,7 +8,7 @@ part 'admin_state.dart';
 class AdminBloc extends Bloc<AdminEvent, AdminState> {
   AdminBloc() : super(AdminState(view: const LogoView())) {
     on<ChangeViewEvent>((event, emit) {
-      emit(AdminState(view: state.view));
+      emit(AdminState(view: event.view));
     });
   }
 }

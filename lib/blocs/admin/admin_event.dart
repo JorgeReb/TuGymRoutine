@@ -1,6 +1,11 @@
 part of 'admin_bloc.dart';
 
 @immutable
-sealed class AdminEvent {}
+abstract class AdminEvent{}
 
-class ChangeViewEvent extends AdminEvent {}
+class ChangeViewEvent extends AdminEvent {
+  final Widget view;
+
+  ChangeViewEvent({required this.view});
+
+}

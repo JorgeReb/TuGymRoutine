@@ -1,12 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
 import 'package:tu_gym_routine/constants/constants.dart';
-import 'package:tu_gym_routine/pages/admin/admin_page.dart';
-import 'package:tu_gym_routine/pages/home_page.dart';
 import 'package:tu_gym_routine/validations/fields_validations.dart';
-import 'package:tu_gym_routine/views/add_admin_view.dart';
 
 import '../widgets/widgets.dart';
 
@@ -93,9 +88,7 @@ class _LoginFormState extends State<_LoginForm> {
 
       if (isAdmin == true) {
         if(mounted){
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, "/admin",
-            arguments: {"token": result.token});
+        Navigator.pushReplacementNamed(context, "/admin");
         }
       } else {
         // ignore: use_build_context_synchronously

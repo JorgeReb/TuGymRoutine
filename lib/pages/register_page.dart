@@ -77,14 +77,12 @@ class _RegisterFormState extends State<_RegisterForm> {
           ),
           const SizedBox(height: 18),
           ElevatedButton(
-            onPressed: () async {
-              if (registerFormKey.currentState!.validate()) {
+              onPressed: () async {
+                if (registerFormKey.currentState!.validate()) {
                   await registerUser();
-                  setState(() {});
                 }
               },
-            child: const Text('Registrarse')
-          ),
+              child: const Text('Registrarse')),
           const SizedBox(height: 5),
           const NavigateToLoginButton(),
           const SizedBox(height: 40),
@@ -95,42 +93,37 @@ class _RegisterFormState extends State<_RegisterForm> {
   }
 
   Future<void> registerUser() async {
-    try {
-      UserService().addUser(emailCtrl.text.trim(),passwordCtrl.text.trim(),nameCtrl.text.trim())
-        .then((value) {
+    UserService().addUser(emailCtrl.text.trim(), passwordCtrl.text.trim(),nameCtrl.text.trim())
+      .then((value) {
+      if (value['message'] == "The password must be a string with at least 6 characters.") {
         return CustomAlertDialog(
-          icon: successIcon,
-          text: succesTextRegister,
-          color: succesColor,
-          textButton: TextButton(child: aceptText,onPressed: () => Navigator.pushNamed(context, '/'))
+                icon: alertIcon,
+                text: weakPasswordText,
+                color: alertColor,
+                textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
         ).showCustomDialog(context);
-      });
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "weak-password") {
-        // ignore: use_build_context_synchronously
+      } else if (value['message'] == "The email address is already in use by another account.") {
         return CustomAlertDialog(
-          icon: alertIcon,
-          text: weakPasswordText,
-          color: alertColor,
-          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+                icon: alertIcon,
+                text: isRegisterdText,
+                color: alertColor,
+                textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
         ).showCustomDialog(context);
-      } else if (e.code == "email-already-in-use") {
-        // ignore: use_build_context_synchronously
+      } else if (value['success'] == true) {
         return CustomAlertDialog(
-          icon: alertIcon,
-          text: isRegisterdText,
-          color: alertColor,
-          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
-          ).showCustomDialog(context);
+                icon: successIcon,
+                text: succesTextRegister,
+                color: succesColor,
+                textButton: TextButton(child: aceptText,onPressed: () => Navigator.pushNamed(context, '/'))
+        ).showCustomDialog(context);
       } else {
-        // ignore: use_build_context_synchronously
         return CustomAlertDialog(
-          icon: alertIcon,
-          text: alertTextRegister,
-          color: alertColor,
-          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
-          ).showCustomDialog(context);
+                icon: alertIcon,
+                text: alertTextRegister,
+                color: alertColor,
+                textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+        ).showCustomDialog(context);
       }
-    }
+    });
   }
 }

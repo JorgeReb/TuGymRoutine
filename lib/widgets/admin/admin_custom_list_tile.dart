@@ -19,8 +19,7 @@ class AdminCustomListTile extends StatelessWidget {
             fontWeight: FontWeight.w300,
           ),
           textAlign: TextAlign.left),
-      leading:
-        Icon(icon, color: Colors.white, size: 20),
+      leading: Icon(icon, color: Colors.white, size: 20),
     );
   }
 }

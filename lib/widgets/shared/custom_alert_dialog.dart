@@ -19,18 +19,18 @@ class CustomAlertDialog extends StatelessWidget {
         backgroundColor:  const Color.fromARGB(255, 37, 37, 37),
         content:   SizedBox(
             width: 50.0,
-            height: 60.0,
+            height: 70.0,
             child:  Column(
               children: [
                 text,
-                const SizedBox(height: 10,),
+                const SizedBox(height: 20,),
                 Divider(color: color)
               ],
             )
           ),
         buttonPadding: const EdgeInsets.all(0),
         contentPadding:
-            const EdgeInsets.only(top: 12, left: 5, right: 5, bottom: 0),
+            const EdgeInsets.only(top: 15, left: 5, right: 5, bottom: 0),
             iconPadding: const EdgeInsets.only(bottom: 10, top: 12),
         actions: [
           Center(child: textButton),

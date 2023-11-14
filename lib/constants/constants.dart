@@ -19,5 +19,9 @@ const Text isRegisterdText = Text('Este correo ya ha sido registrado anteriormen
 
 //Login page
 const Text invalidPasswordText = Text('La contraseña introducida es incorrecta.',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);
-const Text invalidEmailText = Text('El correo introducido no corresponde con niguno existente.',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);
+const Text invalidEmailText = Text('Los datos introducidos no corresponden con ninguna cuenta.',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);
 const Text userDiabledText = Text('La cuenta ha sido desactivada temporalmente.',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);
+
+//User page
+const Text askIsSure = Text('¿Estás seguro de eliminar este usuario?',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);
+const Text confirmDeleteText = Text("Eliminar",style: TextStyle(color: alertColor));
