@@ -12,8 +12,5 @@ class UserAdminBloc extends Bloc<UserAdminEvent, UserAdminState> {
     on<DisposeEvent>((event, emit) {
       emit(UserAdminState(isEnabled: event.isEnabled));
     });
-    on<ReloadPageEvent>((event, emit) {
-      emit(const UserAdminState(reloadPage: true, isEnabled: false));  
-    });
   }
 }

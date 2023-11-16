@@ -100,7 +100,10 @@ class _BotonSalir extends StatelessWidget {
       child: ListTile(
         tileColor: const Color.fromARGB(255, 34, 34, 34),
         onTap: () async{
-          await user.signOut().then((value) => Navigator.pushReplacementNamed(context, '/'));
+          await user.signOut().then((value) {
+            BlocProvider.of<AdminBloc>(context).state.view = const LogoView();
+            Navigator.pushReplacementNamed(context, '/');
+          });
         },
         title: const Text('Salir',
             style: TextStyle(

@@ -5,7 +5,6 @@ class UserAdminEvent {}
 
 class ChangeEnabledInputs extends UserAdminEvent{
   final bool isEnabled;
-
   ChangeEnabledInputs({required this.isEnabled});
 }
 
@@ -14,4 +13,4 @@ class DisposeEvent extends UserAdminEvent{
   DisposeEvent({required this.isEnabled});
 }
 
-class ReloadPageEvent extends UserAdminEvent{}
+

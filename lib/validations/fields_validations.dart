@@ -33,3 +33,13 @@ String? validateName(String? value) {
   }
   return null;
 }
+
+
+String? validateUpdateInputsExercise(String? value) {
+  if (value!.isEmpty) {
+    return "El campo es obligatorio";
+  } else if (value.length < 5) {
+    return "Debe tener al menos 5 caracteres";
+  } 
+  return null;
+}

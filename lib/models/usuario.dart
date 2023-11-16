@@ -29,13 +29,13 @@ class Usuario {
   String toJson() => json.encode(toMap());
 
   factory Usuario.fromMap(Map<String, dynamic> json) => Usuario(
-        id: json['id'],
-        name: json["name"],
-        email: json["email"],
-      );
+    id: json['id'],
+    name: json["name"],
+    email: json["email"],
+  );
 
   Map<String, dynamic> toMap() => {
-        "name": name,
-        "email": email,
-      };
+    "name": name,
+    "email": email,
+  };
 }

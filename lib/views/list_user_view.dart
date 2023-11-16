@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
 import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'package:tu_gym_routine/pages/pages.dart';
@@ -17,34 +15,29 @@ class _ListUserViewState extends State<ListUserView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: primaryColor,
       height: double.infinity,
       width: double.infinity,
-      child: BlocBuilder<AdminBloc, AdminState>(
-        builder: (context, state) {
-          //final currentAdminToken = state.token;
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: FutureBuilder<List<Usuario>>(
-              future: getUsersList(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final userList = snapshot.data;
-                  return Column(
-                    children: [
-                      UsersTable(users: userList!),
-                    ],
-                  );
-                } else {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 50),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-              },
-            ),
-          );
-        },
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: FutureBuilder<List<Usuario>>(
+          future: getUsersList(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final userList = snapshot.data;
+              return Column(
+                children: [
+                  UsersTable(users: userList!),
+                ],
+              );
+            } else {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 50),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -99,22 +92,22 @@ class _UsersTableState extends State<UsersTable> {
   @override
   Widget build(BuildContext context) {
     final columns = <DataColumn>[
-      const DataColumn(label: Padding(padding: EdgeInsets.only(left:15.0),child: Text('Nombre'))),
-      const DataColumn(label: Padding(padding: EdgeInsets.only(left:27.0),child: Text('Email'))),
-      const DataColumn(label: Text('Visualizar')),
+      const DataColumn(label: Padding(padding: EdgeInsets.only(left:15.0),child: Text('Nombre', style: TextStyle(color: primaryColor),))),
+      const DataColumn(label: Padding(padding: EdgeInsets.only(left:27.0),child: Text('Email', style: TextStyle(color: primaryColor),))),
+      const DataColumn(label: Text('Visualizar', style: TextStyle(color: primaryColor),)),
     ];
 
     final rows = _filteredUsuarios.map((user) {
       return DataRow(
         cells: <DataCell>[
-          DataCell(Padding(padding: const EdgeInsets.only(left: 8.0),child: Text(user.name, style: const TextStyle(color: Colors.white)))),
-          DataCell(Text(user.email, style: const TextStyle(color: Colors.white))),
-          DataCell(const Padding(padding: EdgeInsets.only(left:15.0),child: Icon(Icons.remove_red_eye_outlined, color: Colors.white,)
+          DataCell(Padding(padding: const EdgeInsets.only(left: 8.0),child: Text(user.name, style: const TextStyle(color: secundaryColor)))),
+          DataCell(Text(user.email, style: const TextStyle(color: secundaryColor))),
+          DataCell(const Padding(padding: EdgeInsets.only(left:15.0),child: Icon(Icons.remove_red_eye_outlined, color: secundaryColor,)
           ), 
           onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => UserPage(user: user,)))
           ),
         ],
-        color: MaterialStateProperty.all(primaryColor.withOpacity(0.9))
+        color: MaterialStateColor.resolveWith((states) => primaryColor),
       );
     }).toList();
 
@@ -125,27 +118,30 @@ class _UsersTableState extends State<UsersTable> {
               const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
           child: TextField(
             controller: _searchController,
-            style: const TextStyle(color: primaryColor),
-            cursorColor: primaryColor,
+            style: const TextStyle(color: secundaryColor),
+            cursorColor: secundaryColor,
             decoration: const InputDecoration(
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: secundaryColor)),
               labelText: 'Buscar por nombre',
-              labelStyle: TextStyle(color: primaryColor),
+              labelStyle: TextStyle(color: secundaryColor),
               focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: primaryColor)),
+                borderSide: BorderSide(color: secundaryColor)),
             ),
             onChanged: (value) {
               _filterUsuarios(value);
             },
           ),
         ),
-        PaginatedDataTable(
-          horizontalMargin: 25,
-          columnSpacing: 45,
-          columns: columns,
-          source: _DataSource(rows),
-          rowsPerPage: 5,
-
-         
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: PaginatedDataTable(
+            arrowHeadColor: primaryColor,
+            horizontalMargin: 25,
+            columnSpacing: 45,
+            columns: columns,
+            source: _DataSource(rows),
+            rowsPerPage: 5,         
+          ),
         ),
       ],
     );

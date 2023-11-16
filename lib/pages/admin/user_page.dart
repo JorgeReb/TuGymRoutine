@@ -6,7 +6,6 @@ import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'package:tu_gym_routine/pages/admin/admin_page.dart';
 import 'package:tu_gym_routine/services/user_service.dart';
-import 'package:tu_gym_routine/validations/fields_validations.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
 // ignore: must_be_immutable
@@ -17,25 +16,34 @@ class UserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryColor,
-      body: SingleChildScrollView(
-        child: Container(
-          color: primaryColor,
-          child: FadeInDown(
-            delay: const Duration(milliseconds: 300),
-            child: Column(
-              children: [
-                _InfoUser(user!),
-                _FormUser(user: user!),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
-                  child: GestureDetector(
-                      onTap: () => Navigator.push(context,  MaterialPageRoute(builder: (context) => const AdminPage())),
-                      child: const Icon(Icons.logout,color: Colors.grey,size: 50)
-                  ),
-                )
-              ],
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<UserAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
+        Navigator.push(context,MaterialPageRoute(builder: (context) => const AdminPage()));
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: primaryColor,
+        body: SingleChildScrollView(
+          child: Container(
+            color: primaryColor,
+            child: FadeInDown(
+              delay: const Duration(milliseconds: 300),
+              child: Column(
+                children: [
+                  _InfoUser(user!),
+                  _FormUser(user: user!),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          context.read<UserAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => const AdminPage()));
+                        },
+                        child: const Icon(Icons.logout,color: Colors.grey, size: 50)),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -107,56 +115,55 @@ class _FormUserState extends State<_FormUser> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
-        height: 325,
+        height: 275,
         child: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              autovalidateMode: AutovalidateMode.always,
-              key: userForm,
-              child: BlocBuilder<UserAdminBloc, UserAdminState>(
-                builder: (context, state){
-                  return Column(
-                    children: [
-                      _CustomInputField(
-                          controller: nameCtrl,
-                          label: 'Nombre',
-                          icon: const Icon(Icons.account_circle_rounded,color: primaryColor),
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            autovalidateMode: AutovalidateMode.always,
+            key: userForm,
+            child: BlocBuilder<UserAdminBloc, UserAdminState>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    _CustomInputField(
+                        controller: nameCtrl,
+                        label: 'Nombre',
+                        icon: const Icon(Icons.account_circle_rounded,
+                            color: primaryColor),
+                        isEnabled: state.isEnabled,
+                        validator: null),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25.0, bottom: 3.0),
+                      child: _CustomInputField(
+                          controller: emailCtrl,
+                          label: 'Email',
+                          icon: const Icon(Icons.email, color: primaryColor),
                           isEnabled: state.isEnabled,
-                          validator: validateName),
+                          validator: null),
+                    ),
+                    if (state.isEnabled)
                       Padding(
-                        padding: const EdgeInsets.only(top: 25.0, bottom: 3.0),
-                        child: _CustomInputField(
-                            controller: emailCtrl,
-                            label: 'Email',
-                            icon: const Icon(Icons.email, color: primaryColor),
-                            isEnabled: state.isEnabled,
-                            validator: validateEmail),
-                      ),
-                      if(state.isEnabled)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
+                        padding: const EdgeInsets.only(top: 20.0),
                         child: TextButton(
-                            onPressed: () async{
-                              if(userForm.currentState!.validate()){
-                                await UserService().updateUser(widget.user.id, emailCtrl.text.trim(), nameCtrl.text);
+                            onPressed: () async {
+                              if (userForm.currentState!.validate()) {
+                                await UserService().updateUser(widget.user.id,emailCtrl.text.trim(), nameCtrl.text);
                                 // ignore: use_build_context_synchronously
                                 context.read<UserAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
-                              }else{
+                              } else {
                                 isOk = true;
                               }
-                              if(isOk == false) return;
+                              if (isOk == false) return;
                             },
                             style: const ButtonStyle(fixedSize:MaterialStatePropertyAll(Size(115, 20)),backgroundColor:MaterialStatePropertyAll(Colors.blue)),
                             child: const Text('Modificar',style: TextStyle(color: secundaryColor))),
                       ),
-                    ],
-                  );
-                },
-              ),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -164,7 +171,6 @@ class _FormUserState extends State<_FormUser> {
     );
   }
 }
-
 
 class _CustomInputField extends StatelessWidget {
   final String label;

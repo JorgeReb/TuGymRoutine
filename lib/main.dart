@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
+import 'package:tu_gym_routine/blocs/exercise_admin/exercise_admin_bloc.dart';
 import 'package:tu_gym_routine/blocs/user_admin/user_admin_bloc.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'firebase_options.dart';
@@ -21,6 +22,7 @@ void main() async {
       providers: [
         BlocProvider(create: (_) => AdminBloc()), 
         BlocProvider(create: (_) => UserAdminBloc()), 
+        BlocProvider(create: (_) => ExerciseAdminBloc()), 
       ], 
       child: MyApp()));
     
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TuGymRoutine',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/admin',
       routes: routes,
     );
   }
