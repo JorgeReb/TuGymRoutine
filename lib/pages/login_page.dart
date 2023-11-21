@@ -1,8 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/validations/fields_validations.dart';
-
 import '../widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
@@ -14,15 +16,17 @@ class LoginPage extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 34, 34, 34),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(children: [
-          const SizedBox(height: 100),
-          const NameLogo(),
-          Container(
-            height: 650,
-            margin: const EdgeInsets.only(top: 20, left: 50, right: 50),
-            child: const _LoginForm(),
-          ),
-        ]),
+        child: Column(
+          children: [
+            const SizedBox(height: 100),
+            const NameLogo(),
+            Container(
+              height: 650,
+              margin: const EdgeInsets.only(top: 20, left: 50, right: 50),
+              child: const _LoginForm(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -67,10 +71,15 @@ class _LoginFormState extends State<_LoginForm> {
           ),
           const SizedBox(height: 40),
           ElevatedButton(
-              onPressed: () async {
-                if (loginFormKey.currentState!.validate()) await loginUser();
-              },
-              child: const Text('Iniciar sesión')),
+            style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                fixedSize: MaterialStatePropertyAll(Size(300, 30))
+            ),
+            onPressed: () async {
+              if (loginFormKey.currentState!.validate()) await loginUser();
+            },
+            child: const Text('Iniciar sesión')
+          ),
           const SizedBox(height: 20),
           const NavigateToRegisterButton(),
           const SizedBox(height: 40),
@@ -91,51 +100,42 @@ class _LoginFormState extends State<_LoginForm> {
         Navigator.pushReplacementNamed(context, "/admin");
         }
       } else {
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/home');
       }
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "wrong-password":
-          // ignore: use_build_context_synchronously
           CustomAlertDialog(
             icon: alertIcon,
             text: invalidPasswordText,
             color: alertColor,
-            textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
+            textButton: TextButton(onPressed: () => Navigator.pop(context), child: cancelText),
           ).showCustomDialog(context);
-          break;
+        break;
         case "user-not-found":
-          // ignore: use_build_context_synchronously
           CustomAlertDialog(
             icon: alertIcon,
             text: invalidEmailText,
             color: alertColor,
-            textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
+            textButton: TextButton(onPressed: () => Navigator.pop(context), child: cancelText),
           ).showCustomDialog(context);
-          break;
+        break;
         case "too-many-requests":
-          // ignore: use_build_context_synchronously
           CustomAlertDialog(
             icon: alertIcon,
             text: userDiabledText,
             color: alertColor,
-            textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
+            textButton: TextButton(onPressed: () => Navigator.pop(context), child: cancelText),
           ).showCustomDialog(context);
-          break;
+        break;
         case "INVALID_LOGIN_CREDENTIALS":
-          // ignore: use_build_context_synchronously
           CustomAlertDialog(
             icon: alertIcon,
             text: invalidEmailText,
             color: alertColor,
-            textButton: TextButton(
-                onPressed: () => Navigator.pop(context), child: cancelText),
+            textButton: TextButton(onPressed: () => Navigator.pop(context), child: cancelText),
           ).showCustomDialog(context);
-          break;
+        break;
       }
     }
   }

@@ -1,42 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:tu_gym_routine/blocs/user/user_bloc.dart';
 import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/exercise.dart';
-import 'package:tu_gym_routine/pages/admin/add_exercise_page.dart';
 import 'package:tu_gym_routine/pages/pages.dart';
 import 'package:tu_gym_routine/services/exercise_service.dart';
+import 'package:tu_gym_routine/views/views.dart';
 
-class ListExerciseView extends StatelessWidget {
-  const ListExerciseView({super.key});
+
+class ExercisesView extends StatelessWidget {
+  const ExercisesView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: secundaryColor,
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddExercisePage()));
-        },
-        child: const Icon(Icons.add, color: primaryColor, size: 30),
-      ),
-      body: Container(
-        color: primaryColor,
-        width: double.infinity,
-        child: FutureBuilder<List<Exercise>>(
+    return WillPopScope(
+      onWillPop: () async{
+        context.read<UserBloc>().add(ChangeViewUserEvent(view: const LogoView()));
+        Navigator.push(context,MaterialPageRoute(builder: (context) => const HomePage()));
+        return true;
+      },
+      child: Scaffold(
+        body: Container(
+          color: primaryColor,
+          width: double.infinity,
+          child: FutureBuilder<List<Exercise>>(
             future: getExercises(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                // Muestra un mensaje de error si hay un problema
                 return Text('Error: ${snapshot.error}',
                     style: const TextStyle(color: Colors.white));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                // Muestra un mensaje si no hay datos disponibles
-                return const Center(
-                    child: Text(
-                  'No hay ejercicios disponibles.',
-                  style: TextStyle(color: Colors.white),
-                ));
+                return const Center(child: Text('No hay ejercicios disponibles.',style: TextStyle(color: Colors.white)));
               } else {
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -47,20 +44,24 @@ class ListExerciseView extends StatelessWidget {
                     return ListTile(
                       minVerticalPadding: 10,
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ExercisePage(exercise: exercise)));
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => ShowExercisePage(exercise: exercise)));
                       },
                       title: Text(
                         exercise.name,
                         style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
                       subtitle: Text(exercise.description,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w100),maxLines: 2),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w100
+                        ),
+                        maxLines: 2
+                      ),
                       leading: Image.asset(
                         'assets/foto_login.png',
                         alignment: Alignment.center,
@@ -71,7 +72,9 @@ class ListExerciseView extends StatelessWidget {
                   },
                 );
               }
-            }),
+            }
+          ),
+        ),
       ),
     );
   }

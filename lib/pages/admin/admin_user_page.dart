@@ -1,11 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:tu_gym_routine/blocs/user_admin/user_admin_bloc.dart';
 import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'package:tu_gym_routine/pages/admin/admin_page.dart';
 import 'package:tu_gym_routine/services/user_service.dart';
+import 'package:tu_gym_routine/validations/fields_validations.dart';
+import 'package:tu_gym_routine/widgets/admin/return_button.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
 // ignore: must_be_immutable
@@ -33,15 +36,7 @@ class UserPage extends StatelessWidget {
                 children: [
                   _InfoUser(user!),
                   _FormUser(user: user!),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50.0),
-                    child: GestureDetector(
-                        onTap: () {
-                          context.read<UserAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
-                          Navigator.push(context,MaterialPageRoute(builder: (context) => const AdminPage()));
-                        },
-                        child: const Icon(Icons.logout,color: Colors.grey, size: 50)),
-                  )
+                  const ReturnButton(),
                 ],
               ),
             ),
@@ -59,7 +54,7 @@ class _InfoUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 80, bottom: 45),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 60, bottom: 35),
       child: Container(
         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
@@ -100,6 +95,8 @@ class _FormUserState extends State<_FormUser> {
   GlobalKey<FormState> userForm = GlobalKey();
   late final TextEditingController nameCtrl;
   late final TextEditingController emailCtrl;
+  late final TextEditingController weightCtrl;
+  late final TextEditingController heightCtrl;
   bool isEnabled = false;
   bool isOk = false;
 
@@ -108,6 +105,8 @@ class _FormUserState extends State<_FormUser> {
     super.initState();
     emailCtrl = TextEditingController(text: widget.user.email);
     nameCtrl = TextEditingController(text: widget.user.name);
+    weightCtrl = TextEditingController(text: widget.user.weight.toString());
+    heightCtrl = TextEditingController(text: widget.user.height.toString());
   }
 
   @override
@@ -115,55 +114,74 @@ class _FormUserState extends State<_FormUser> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
-        height: 275,
+        height: 350,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Form(
-            autovalidateMode: AutovalidateMode.always,
-            key: userForm,
-            child: BlocBuilder<UserAdminBloc, UserAdminState>(
-              builder: (context, state) {
-                return Column(
-                  children: [
-                    _CustomInputField(
+          child: SingleChildScrollView(
+            child: Form(
+              autovalidateMode: AutovalidateMode.always,
+              key: userForm,
+              child: BlocBuilder<UserAdminBloc, UserAdminState>(
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      _CustomInputField(
                         controller: nameCtrl,
                         label: 'Nombre',
-                        icon: const Icon(Icons.account_circle_rounded,
-                            color: primaryColor),
+                        icon: const Icon(Icons.account_circle_rounded,color: primaryColor),
                         isEnabled: state.isEnabled,
-                        validator: null),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25.0, bottom: 3.0),
-                      child: _CustomInputField(
-                          controller: emailCtrl,
-                          label: 'Email',
-                          icon: const Icon(Icons.email, color: primaryColor),
-                          isEnabled: state.isEnabled,
-                          validator: null),
-                    ),
-                    if (state.isEnabled)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: TextButton(
-                            onPressed: () async {
-                              if (userForm.currentState!.validate()) {
-                                await UserService().updateUser(widget.user.id,emailCtrl.text.trim(), nameCtrl.text);
-                                // ignore: use_build_context_synchronously
-                                context.read<UserAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
-                              } else {
-                                isOk = true;
-                              }
-                              if (isOk == false) return;
-                            },
-                            style: const ButtonStyle(fixedSize:MaterialStatePropertyAll(Size(115, 20)),backgroundColor:MaterialStatePropertyAll(Colors.blue)),
-                            child: const Text('Modificar',style: TextStyle(color: secundaryColor))),
+                        validator: validateName
                       ),
-                  ],
-                );
-              },
+                      const SizedBox(height: 5),
+                      _CustomInputField(
+                        controller: emailCtrl,
+                        label: 'Email',
+                        icon: const Icon(Icons.email, color: primaryColor),
+                        isEnabled: state.isEnabled,
+                        validator: validateEmail
+                      ),
+                      const SizedBox(height: 5),
+                      _CustomInputField(
+                        controller: weightCtrl,
+                        label: 'Peso',
+                        icon: const Icon(Icons.email, color: primaryColor),
+                        isEnabled: state.isEnabled,
+                        validator: validateWeight
+                      ),
+                      const SizedBox(height: 5),
+                      _CustomInputField(
+                        controller: heightCtrl,
+                        label: 'Altura',
+                        icon: const Icon(Icons.email, color: primaryColor),
+                        isEnabled: state.isEnabled,
+                        validator: validateHeight
+                      ),
+                      const SizedBox(height: 25),
+
+                      if (state.isEnabled)
+                      TextButton(
+                        onPressed: () async {
+                          if (userForm.currentState!.validate()) {
+                            await UserService().updateUser(widget.user.id,emailCtrl.text.trim(), nameCtrl.text, double.parse(weightCtrl.text), double.parse(heightCtrl.text));
+                            // ignore: use_build_context_synchronously
+                            context.read<UserAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
+                          } else {
+                            isOk = true;
+                          }
+                          if (isOk == false) return;
+                        },
+                        style: const ButtonStyle(
+                          fixedSize:MaterialStatePropertyAll(Size(115, 20)),
+                          backgroundColor:MaterialStatePropertyAll(Colors.blue)),
+                          child: const Text('Modificar',style: TextStyle(color: secundaryColor)
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -172,6 +190,7 @@ class _FormUserState extends State<_FormUser> {
   }
 }
 
+// ignore: must_be_immutable
 class _CustomInputField extends StatelessWidget {
   final String label;
   final Icon icon;
@@ -179,41 +198,31 @@ class _CustomInputField extends StatelessWidget {
   final TextEditingController controller;
   String? Function(String? val)? validator;
 
-  _CustomInputField(
-      {required this.label,
-      required this.icon,
-      required this.isEnabled,
-      required this.validator,
-      required this.controller});
+  _CustomInputField({
+    required this.label,
+    required this.icon,
+    required this.isEnabled,
+    required this.validator,
+    required this.controller
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: const TextStyle(
-        color: primaryColor,
-      ),
+      style: const TextStyle(color: primaryColor),
       controller: controller,
       enabled: isEnabled,
       cursorColor: primaryColor,
       validator: validator,
       decoration: InputDecoration(
         errorStyle: TextStyle(color: Colors.redAccent.withOpacity(0.6)),
-        errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
+        errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
         border: const UnderlineInputBorder(),
         suffixIcon: icon,
         labelText: label,
         labelStyle: const TextStyle(color: primaryColor),
-        focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(
-          width: 2,
-          color: primaryColor,
-        )),
-        enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(
-          width: 2,
-          color: primaryColor,
-        )),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2,color: primaryColor)),
+        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2,color: primaryColor)),
       ),
     );
   }
@@ -221,6 +230,7 @@ class _CustomInputField extends StatelessWidget {
 
 class _UserImage extends StatelessWidget {
   final String image;
+
   const _UserImage(
     this.image,
   );
@@ -229,13 +239,14 @@ class _UserImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipOval(
       child: Container(
-          color: primaryColor,
-          child: Image.network(
-            image,
-            color: Colors.white,
-            width: 100,
-            height: 100,
-          )),
+        color: primaryColor,
+        child: Image.network(
+          image,
+          color: Colors.white,
+          width: 100,
+          height: 100,
+        ),
+      ),
     );
   }
 }
@@ -249,9 +260,7 @@ class _UserName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
-      child: Text(
-        name,
-        style: const TextStyle(color: primaryColor, fontSize: 20),
+      child: Text(name,style: const TextStyle(color: primaryColor, fontSize: 20),
       ),
     );
   }

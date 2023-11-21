@@ -1,6 +1,5 @@
 part of 'admin_bloc.dart';
 
-
 class AdminState {
   Widget? view;
   String? token;

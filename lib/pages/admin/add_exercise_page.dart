@@ -9,6 +9,8 @@ import 'package:tu_gym_routine/pages/pages.dart';
 import 'package:tu_gym_routine/services/exercise_service.dart';
 import 'package:tu_gym_routine/validations/fields_validations.dart';
 import 'package:tu_gym_routine/widgets/admin/custom_admin_input.dart';
+import 'package:tu_gym_routine/widgets/admin/form_label_input.dart';
+import 'package:tu_gym_routine/widgets/admin/return_button.dart';
 
 class AddExercisePage extends StatelessWidget {
   const AddExercisePage({super.key});
@@ -20,21 +22,12 @@ class AddExercisePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: FadeInDown(
           delay: const Duration(milliseconds: 300),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 70, left: 20, right: 20),
+          child: const Padding(
+            padding: EdgeInsets.only(top: 70, left: 20, right: 20),
             child: Column(
               children: [
-                const _FormExercise(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: GestureDetector(
-                      onTap: () {
-                        context.read<ExerciseAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => const AdminPage()));
-                      },
-                      child: const Icon(Icons.logout,color: Colors.grey, size: 50)
-                  ),
-                ),
+                _FormExercise(),
+                ReturnButton(),
               ],
             ),
           ),
@@ -87,14 +80,14 @@ class _FormExerciseState extends State<_FormExercise> {
                 return SingleChildScrollView(
                   child: Column(children: [
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Nombre'),
+                    const FormLabelInput(name: 'Nombre'),
                     CustomAdminInputField(
                         controller: nameCtrl,
                         isEnabled: true,
                         icon: const Icon(FontAwesomeIcons.dumbbell,color: primaryColor, size: 15),
                         validator: validateUpdateInputsExercise),
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Descripción'), 
+                    const FormLabelInput(name: 'Descripción'), 
                     CustomAdminInputField(
                       controller: descriptionCtrl,
                       isEnabled: true,
@@ -102,46 +95,45 @@ class _FormExerciseState extends State<_FormExercise> {
                       validator: validateUpdateInputsExercise,
                     ),
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Tipos'),
-                    SelectItems(
+                    const FormLabelInput(name: 'Tipos'),
+                    _SelectItems(
                       onItemSelected: (value) => setState(() => typeValue = value),
                       items: types,
                       icon: const Icon(Icons.type_specimen, color: primaryColor),
                     ),
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Músculos'),
-                    SelectItems(
+                    const FormLabelInput(name: 'Músculos'),
+                    _SelectItems(
                       onItemSelected: (value) => setState(() => muscleValue = value),
                       items: muscles,
-                      icon: const Icon(FontAwesomeIcons.childReaching,
-                          color: primaryColor),
+                      icon: const Icon(FontAwesomeIcons.childReaching,color: primaryColor),
                     ),
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Imagen'),
-                    SelectItems(
+                    const FormLabelInput(name: 'Imagen'),
+                    _SelectItems(
                       onItemSelected: (value) => setState(() => imageValue = value),
                       items: equipments,
                       icon: const Icon(Icons.image, color: primaryColor),
                     ),
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Equipamiento'),
-                    SelectItems(
+                    const FormLabelInput(name: 'Equipamiento'),
+                    _SelectItems(
                       onItemSelected: (value) => setState(() => equipmentValue = value),
                       items: equipments,icon: const Icon(FontAwesomeIcons.screwdriverWrench,color: primaryColor),
                     ),
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Dificultades'),
-                    SelectItems(
+                    const FormLabelInput(name: 'Dificultades'),
+                    _SelectItems(
                       onItemSelected: (value) => setState(() => difficultyValue = value),
                       items: difficulties, icon: const Icon(Icons.equalizer, color: primaryColor),
                     ),
                     const SizedBox(height: 5),
-                    const _LabelInput(name: 'Objetivos'),
-                    SelectItems(
+                    const FormLabelInput(name: 'Objetivos'),
+                    _SelectItems(
                         onItemSelected: (value) => setState(() => objectiveValue = value),
                         items: objectives,icon: const Icon(FontAwesomeIcons.bullseye,color: primaryColor)
                     ),
-                    addExercise(context),                      
+                    addExerciseButton(context),                      
                   ]),
                 );
               },
@@ -152,70 +144,55 @@ class _FormExerciseState extends State<_FormExercise> {
     );
   }
 
-  Padding addExercise(BuildContext context) {
+  Padding addExerciseButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: TextButton(
-          onPressed: () async {
-            if (addExerciseForm.currentState!.validate()) {
-              try {
-                await ExerciseService().addExercise(
-                  nameCtrl.text,
-                  descriptionCtrl.text,
-                  typeValue,
-                  muscleValue,
-                  imageValue,
-                  equipmentValue,
-                  difficultyValue,
-                  objectiveValue
-                );
-                // ignore: use_build_context_synchronously
-                Navigator.push(context,MaterialPageRoute(builder: (context) => const AdminPage()));
-              } catch (e) {
-                return;
-              } 
-            }
-          },
-          style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(115, 20)),backgroundColor: MaterialStatePropertyAll(Colors.blue)),
-          child: const Text('Añadir', style: TextStyle(color: secundaryColor))),
+        onPressed: () async {
+          if (addExerciseForm.currentState!.validate()) {
+            try {
+              //*¿Hago una función sólo para que me haga la petición y la llamo? */
+              await ExerciseService().addExercise(
+                nameCtrl.text,
+                descriptionCtrl.text,
+                typeValue,
+                muscleValue,
+                imageValue,
+                equipmentValue,
+                difficultyValue,
+                objectiveValue
+              );
+              // ignore: use_build_context_synchronously
+              Navigator.push(context,MaterialPageRoute(builder: (context) => const AdminPage()));
+            } catch (e) {
+              return;
+            } 
+          }
+        },
+        style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(115, 20)),backgroundColor: MaterialStatePropertyAll(Colors.blue)),
+        child: const Text('Añadir', style: TextStyle(color: secundaryColor))
+      ),
     );
   }
 }
 
 
-
-class _LabelInput extends StatelessWidget {
-  final String name;
-  const _LabelInput({
-    required this.name
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(name,textAlign: TextAlign.left,style: const TextStyle(fontSize: 12))
-    );
-  }
-}
-
-class SelectItems extends StatefulWidget {
+class _SelectItems extends StatefulWidget {
   final List<String> items;
   final Icon icon;
   final Function(String) onItemSelected;
 
-  const SelectItems({
-    super.key,
+  const _SelectItems({
     required this.items,
     required this.icon,
     required this.onItemSelected
   });
 
   @override
-  State<SelectItems> createState() => _SelectItemsState();
+  State<_SelectItems> createState() => _SelectItemsState();
 }
 
-class _SelectItemsState extends State<SelectItems> {
+class _SelectItemsState extends State<_SelectItems> {
   late String dropdownValue;
 
   @override
@@ -239,7 +216,7 @@ class _SelectItemsState extends State<SelectItems> {
       }).toList(),
       focusColor: primaryColor,
       dropdownColor: secundaryColor,
-      decoration: InputDecoration(
+      decoration: InputDecoration( 
         errorStyle: TextStyle(color: Colors.redAccent.withOpacity(0.6)),
         errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
         enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),

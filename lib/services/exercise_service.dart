@@ -20,14 +20,15 @@ class ExerciseService {
   }
 
   addExercise(
-      String name,
-      String description,
-      String type,
-      String muscle,
-      String image,
-      String equipment,
-      String difficulty,
-      String objective) async {
+    String name,
+    String description,
+    String type,
+    String muscle,
+    String image,
+    String equipment,
+    String difficulty,
+    String objective
+  ) async {
     try {
       final response = await dio.post('https://addexercise-ycxk3qq6za-uc.a.run.app', data: {
         "name": name,
@@ -46,16 +47,16 @@ class ExerciseService {
   }
 
   updateExercise(
-      String exerciseId,
-      String name,
-      String description,
-      String type,
-      String muscle,
-      String image,
-      String equipment,
-      String difficulty,
-      String objective) async {
-
+    String exerciseId,
+    String name,
+    String description,
+    String type,
+    String muscle,
+    String image,
+    String equipment,
+    String difficulty,
+    String objective
+  ) async {
     final response = await dio.post('https://updateexercise-ycxk3qq6za-uc.a.run.app', data: {
       "exerciseId": exerciseId,
       "name": name,

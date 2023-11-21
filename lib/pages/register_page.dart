@@ -15,15 +15,17 @@ class RegisterPage extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 34, 34, 34),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(children: [
-          const SizedBox(height: 100),
-          const NameLogo(),
-          Container(
-            height: 650,
-            margin: const EdgeInsets.only(top: 20, left: 50, right: 50),
-            child: const _RegisterForm(),
-          ),
-        ]),
+        child: Column(
+          children: [
+            const SizedBox(height: 100),
+            const NameLogo(),
+            Container(
+              height: 650,
+              margin: const EdgeInsets.only(top: 20, left: 50, right: 50),
+              child: const _RegisterForm(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -77,12 +79,13 @@ class _RegisterFormState extends State<_RegisterForm> {
           ),
           const SizedBox(height: 18),
           ElevatedButton(
-              onPressed: () async {
-                if (registerFormKey.currentState!.validate()) {
-                  await registerUser();
-                }
-              },
-              child: const Text('Registrarse')),
+            onPressed: () async {
+              if (registerFormKey.currentState!.validate()) {
+                await registerUser();
+              }
+            },
+            child: const Text('Registrarse')
+          ),
           const SizedBox(height: 5),
           const NavigateToLoginButton(),
           const SizedBox(height: 40),
@@ -97,31 +100,31 @@ class _RegisterFormState extends State<_RegisterForm> {
       .then((value) {
       if (value['message'] == "The password must be a string with at least 6 characters.") {
         return CustomAlertDialog(
-                icon: alertIcon,
-                text: weakPasswordText,
-                color: alertColor,
-                textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+          icon: alertIcon,
+          text: weakPasswordText,
+          color: alertColor,
+          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
         ).showCustomDialog(context);
       } else if (value['message'] == "The email address is already in use by another account.") {
         return CustomAlertDialog(
-                icon: alertIcon,
-                text: isRegisterdText,
-                color: alertColor,
-                textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+          icon: alertIcon,
+          text: isRegisterdText,
+          color: alertColor,
+          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
         ).showCustomDialog(context);
       } else if (value['success'] == true) {
         return CustomAlertDialog(
-                icon: successIcon,
-                text: succesTextRegister,
-                color: succesColor,
-                textButton: TextButton(child: aceptText,onPressed: () => Navigator.pushNamed(context, '/'))
+          icon: successIcon,
+          text: succesTextRegister,
+          color: succesColor,
+          textButton: TextButton(child: aceptText,onPressed: () => Navigator.pushNamed(context, '/'))
         ).showCustomDialog(context);
       } else {
         return CustomAlertDialog(
-                icon: alertIcon,
-                text: alertTextRegister,
-                color: alertColor,
-                textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
+          icon: alertIcon,
+          text: alertTextRegister,
+          color: alertColor,
+          textButton: TextButton(child: cancelText, onPressed: () => Navigator.pop(context))
         ).showCustomDialog(context);
       }
     });

@@ -11,7 +11,7 @@ class NavigateToLoginButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: () => Navigator.pushNamed(context, "/"),
       style: const ButtonStyle(
-          side: MaterialStatePropertyAll(BorderSide.none)),
+        side: MaterialStatePropertyAll(BorderSide.none)),
       child: const Text(
         '¿Ya tienes cuenta?',
         style: TextStyle(

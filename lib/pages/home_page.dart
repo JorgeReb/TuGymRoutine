@@ -1,51 +1,80 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tu_gym_routine/services/user_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:tu_gym_routine/blocs/user/user_bloc.dart';
+import 'package:tu_gym_routine/constants/constants.dart';
+import 'package:tu_gym_routine/models/usuario.dart';
+import 'package:tu_gym_routine/services/user_service.dart';
+import 'package:tu_gym_routine/widgets/user/custom_user_drawer.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+   Usuario? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarUsuarioDesdeBD();
+  }
+
+   Future<void> _cargarUsuarioDesdeBD() async {
+    Usuario userDb = await UserService().getUserById(currentUser!.uid);
+    setState(() {
+      user = userDb;
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    final User? usuario = FirebaseAuth.instance.currentUser;
-    String? email = "";
-
-    if (usuario != null) {
-      email = usuario.email;
-    }
-
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Text(email!),
-            // FutureBuilder(
-            //   future: UserService().getUsers(),
-            //   builder: (context, snapshot) {             
-            //     if (snapshot.hasData) {
-            //       return ListView.builder(
-            //         itemCount: snapshot.data?.length,
-            //         itemBuilder: (context, index) {
-            //           return Text(snapshot.data?[index]['name']);
-            //         },
-            //       );
-            //     } else {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     }
-            //   },
-            // ),
-            ElevatedButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushReplacementNamed(context, '/');
-                },
-                child: const Text('salir'))
-          ],
-        ),
+      appBar: AppBar(
+        title: const Text('TuGymRoutine',style: TextStyle(color: secundaryColor)),
+        backgroundColor: primaryColor,
+        elevation: 10,
+        actions: [
+          FutureBuilder<Usuario>(
+            future: UserService().getUserById(currentUser!.uid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center();
+              } else {
+                user = snapshot.data;
+                final userName = snapshot.data!.name;
+                return Row(
+                  children: [
+                    Text(
+                      userName,
+                      style: const TextStyle(fontSize: 15),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Icon(Icons.account_circle_rounded, size: 30),
+                    ),
+                  ],
+                );
+              }
+            }
+          ),
+        ],
       ),
+      drawer: user != null ? CustomUserDrawer(user: user!) : null,
+      body: BlocBuilder<UserBloc, UserState>(
+      builder: (context, userState) {
+        userState.token = currentUser!.getIdTokenResult().toString();
+        return userState.view!;
+      },
+    ),
+    backgroundColor: const Color.fromARGB(255, 34, 34, 34),
     );
   }
 }

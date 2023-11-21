@@ -20,6 +20,14 @@ class UserService {
     return users;
   }
 
+  Future<Usuario> getUserById(String uid) async {
+    
+    DocumentSnapshot<Object?> queryUser = await collectionReferenceUser.doc(uid).get();
+    Usuario user = Usuario.fromDocumentSnapshot(queryUser);
+
+    return user;
+  }
+
   addUser(String email, String password, String name) async {
     try {
       final response = await dio.post('https://adduser-ycxk3qq6za-uc.a.run.app', data: {
@@ -38,15 +46,16 @@ class UserService {
     return response.data;
   }
 
-  updateUser(String uid, String email, String name) async {
-    await collectionReferenceUser.doc(uid).update({"email": email, "name": name});
+  updateUser(String uid, String email, String name, double weight, double height) async {
+    await collectionReferenceUser.doc(uid).update({"email": email, "name": name, "weight": weight, "height": height});
 
     final response = await dio.post('https://updateuser-ycxk3qq6za-uc.a.run.app',data: {
-      "uid": uid, "newEmail": email
+      "uid": uid, "email": email
     });
 
     return response.data;
   }
+
 
   addAdminPrivileges(User user, String uid) async {
     final token = await user.getIdToken();

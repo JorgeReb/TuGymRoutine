@@ -30,8 +30,8 @@ class CustomAlertDialog extends StatelessWidget {
           ),
         buttonPadding: const EdgeInsets.all(0),
         contentPadding:
-            const EdgeInsets.only(top: 15, left: 5, right: 5, bottom: 0),
-            iconPadding: const EdgeInsets.only(bottom: 10, top: 12),
+          const EdgeInsets.only(top: 15, left: 5, right: 5, bottom: 0),
+          iconPadding: const EdgeInsets.only(bottom: 10, top: 12),
         actions: [
           Center(child: textButton),
         ],
@@ -40,14 +40,14 @@ class CustomAlertDialog extends StatelessWidget {
   }
 
   Future<void> showCustomDialog(BuildContext context) {
-        return showDialog(
-        context: context,
-        builder: (_) => CustomAlertDialog(
-          color: color,
-          icon: icon,
-          text: text,
-          textButton: textButton,
-        ),
+    return showDialog(
+      context: context,
+      builder: (_) => CustomAlertDialog(
+        color: color,
+        icon: icon,
+        text: text,
+        textButton: textButton,
+      ),
     );
   }
 }

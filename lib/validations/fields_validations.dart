@@ -34,6 +34,43 @@ String? validateName(String? value) {
   return null;
 }
 
+String? validateWeight(String? value){
+  bool isDouble = false;
+  try {
+    double.parse(value!);
+    isDouble = true;
+  } catch (e) {
+    isDouble =  false;
+  }
+  if(value!.isEmpty){
+    return "El peso es obligatorio";
+  }else if(isDouble == false || value[value.length-1] == '.'){
+    return "El peso introducido no tiene el formato correcto";
+  }else{
+    if(double.parse(value) > 150 || double.parse(value) < 25.0){
+      return "El peso no es coherente";
+    }
+  }
+  return null;
+}
+
+String? validateHeight(String? value){
+  bool isDouble = false;
+  try {
+    double.parse(value!);
+    isDouble = true;
+  } catch (e) {
+    isDouble =  false;
+  }
+  if(value!.isEmpty){
+    return "La altura es obligatoria";
+  }else if(isDouble == false || value[value.length-1] == '.'){
+    return "La altura introducida no tiene el formato correcto";
+  }else if(double.parse(value) > 2.60 || double.parse(value) < 1.2){
+    return "La altura no es coherente";
+  }
+  return null;
+}
 
 String? validateUpdateInputsExercise(String? value) {
   if (value!.isEmpty) {

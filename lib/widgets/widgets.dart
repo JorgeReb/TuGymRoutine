@@ -1,8 +1,8 @@
 export 'package:tu_gym_routine/widgets/admin/custom_admin_input.dart';
 export 'package:tu_gym_routine/widgets/admin/is_admin_button_widget.dart';
 export 'package:tu_gym_routine/widgets/admin/user_actions_buttons.dart';
-export 'package:tu_gym_routine/widgets/admin/admin_custom_list_tile.dart';
-export 'package:tu_gym_routine/widgets/admin/custom_drawer.dart';
+export 'package:tu_gym_routine/widgets/admin/custom_list_tile.dart';
+export 'package:tu_gym_routine/widgets/admin/custom_admin_drawer.dart';
 
 
 

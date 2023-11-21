@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'package:tu_gym_routine/pages/pages.dart';
@@ -44,10 +45,10 @@ class _ListUserViewState extends State<ListUserView> {
 }
 
 Future<List<Usuario>> getUsersList() async {
-  final List<Usuario> users = await UserService().getUsers();
+  final List<Usuario> users =  await UserService().getUsers();
 
   final List<Usuario> userList = users.map((user) {
-    return Usuario(id: user.id, name: user.name, email: user.email);
+    return Usuario(id: user.id, name: user.name, email: user.email, weight: user.weight, height: user.height);
   }).toList();
 
   return userList;
@@ -78,10 +79,7 @@ class _UsersTableState extends State<UsersTable> {
         _filteredUsuarios.addAll(widget.users);
       });
     } else {
-      final filteredUsuarios = widget.users
-          .where((usuario) =>
-              usuario.name.toLowerCase().contains(searchTerm.toLowerCase()))
-          .toList();
+      final filteredUsuarios = widget.users.where((usuario) =>usuario.name.toLowerCase().contains(searchTerm.toLowerCase())).toList();
       setState(() {
         _filteredUsuarios.clear();
         _filteredUsuarios.addAll(filteredUsuarios);
@@ -94,6 +92,8 @@ class _UsersTableState extends State<UsersTable> {
     final columns = <DataColumn>[
       const DataColumn(label: Padding(padding: EdgeInsets.only(left:15.0),child: Text('Nombre', style: TextStyle(color: primaryColor),))),
       const DataColumn(label: Padding(padding: EdgeInsets.only(left:27.0),child: Text('Email', style: TextStyle(color: primaryColor),))),
+      const DataColumn(label: Text('Peso', style: TextStyle(color: primaryColor),)),
+      const DataColumn(label: Text('Altura', style: TextStyle(color: primaryColor),)),
       const DataColumn(label: Text('Visualizar', style: TextStyle(color: primaryColor),)),
     ];
 
@@ -102,6 +102,8 @@ class _UsersTableState extends State<UsersTable> {
         cells: <DataCell>[
           DataCell(Padding(padding: const EdgeInsets.only(left: 8.0),child: Text(user.name, style: const TextStyle(color: secundaryColor)))),
           DataCell(Text(user.email, style: const TextStyle(color: secundaryColor))),
+          DataCell(Padding(padding: const EdgeInsets.only(left: 5.0),child: Text(user.weight.toString(), style: const TextStyle(color: secundaryColor)),)),
+          DataCell(Padding(padding: const EdgeInsets.only(left:10.0),child: Text(user.height.toString(), style: const TextStyle(color: secundaryColor)),)),
           DataCell(const Padding(padding: EdgeInsets.only(left:15.0),child: Icon(Icons.remove_red_eye_outlined, color: secundaryColor,)
           ), 
           onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => UserPage(user: user,)))
@@ -115,7 +117,7 @@ class _UsersTableState extends State<UsersTable> {
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
+            const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
           child: TextField(
             controller: _searchController,
             style: const TextStyle(color: secundaryColor),
@@ -124,8 +126,7 @@ class _UsersTableState extends State<UsersTable> {
               enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: secundaryColor)),
               labelText: 'Buscar por nombre',
               labelStyle: TextStyle(color: secundaryColor),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: secundaryColor)),
+              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: secundaryColor)),
             ),
             onChanged: (value) {
               _filterUsuarios(value);

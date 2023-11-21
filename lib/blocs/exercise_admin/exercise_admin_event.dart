@@ -1,6 +1,5 @@
 part of 'exercise_admin_bloc.dart';
 
-
 class ExerciseAdminEvent {}
 
 class ChangeEnabledInputs extends ExerciseAdminEvent{
