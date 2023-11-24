@@ -25,7 +25,7 @@ class ProfileView extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: FadeInDown(
           delay: const Duration(milliseconds: 200),
           child: SingleChildScrollView(
@@ -34,9 +34,9 @@ class ProfileView extends StatelessWidget {
               children: [
                 const _UserImage(),
                 Text(user.name.toUpperCase(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 25,
-                    color: secundaryColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     letterSpacing: 2,
                     fontWeight: FontWeight.w200
                   )
@@ -142,8 +142,7 @@ class _SaveChanges extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: const ButtonStyle(
-        fixedSize: MaterialStatePropertyAll(Size(300, 30))),
+      style:  const ButtonStyle(fixedSize:  MaterialStatePropertyAll(Size(300, 30)), backgroundColor: MaterialStatePropertyAll(Colors.blue)),
       onPressed: () async {
         if (profileFormKey.currentState!.validate()) {
           mostrarSnackbar(context);
@@ -162,7 +161,7 @@ class _SaveChanges extends StatelessWidget {
           return;
         }
       },
-      child: const Text('Guardar')
+      child: const Text('Guardar', style: TextStyle(color: Colors.white ))
     );
   }
 }
@@ -196,15 +195,15 @@ class _CustomProfileInput extends StatelessWidget {
       controller: controller,
       obscureText: isObscureText,
       validator: validator,
-      style: const TextStyle(color: Colors.white),
+      style:  TextStyle(color: Theme.of(context).colorScheme.secondary),
       decoration: InputDecoration(
         errorStyle: TextStyle(color: Colors.redAccent.withOpacity(0.6)),
         errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
         border: const UnderlineInputBorder(),
-        suffixIcon: Icon(icon, color: Colors.white),
+        suffixIcon: Icon(icon, color: Theme.of(context).colorScheme.secondary),
         labelText: nombreCampo,
-        labelStyle: const TextStyle(color: Colors.white70),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2,color: Colors.white,))
+        labelStyle:  TextStyle(color: Theme.of(context).colorScheme.secondary),
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 1,color: Theme.of(context).colorScheme.secondary,))
       ),
     );
   }
@@ -218,14 +217,14 @@ class _UserImage extends StatelessWidget {
     return Container(
       height: 200,
       width: double.infinity,
-      color: primaryColor,
+      color: Theme.of(context).colorScheme.background,
       child: Center(
         child: ClipOval(
           child: Container(
-            color: secundaryColor,
+            color: Theme.of(context).colorScheme.secondary,
             child: Image.network(
               'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
-              color: primaryColor,
+              color: Theme.of(context).colorScheme.background,
               width: 150,
             ),
           ),

@@ -23,15 +23,17 @@ class CustomInputField extends StatelessWidget {
       controller: controller,
       obscureText: isObscureText,
       validator: validator,
-      style: const TextStyle(color: Colors.white,),
+      cursorColor: Theme.of(context).colorScheme.secondary,
+      style:  TextStyle(color: Theme.of(context).colorScheme.secondary),
       decoration: InputDecoration(
         errorStyle: TextStyle(color: Colors.redAccent.withOpacity(0.6)),
         errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
         border: const UnderlineInputBorder(),
-        suffixIcon: Icon(icon, color: Colors.white),
+        suffixIcon: Icon(icon, color: Theme.of(context).colorScheme.secondary),
         labelText: nombreCampo,
-        labelStyle: const TextStyle(color: Colors.white70),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2,color: Colors.white,))
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        enabledBorder:  UnderlineInputBorder(borderSide: BorderSide(width: 1,color: Theme.of(context).colorScheme.secondary,)),
+        focusedBorder:  UnderlineInputBorder(borderSide: BorderSide(width: 1,color: Theme.of(context).colorScheme.secondary)),
       ),
     );
   }

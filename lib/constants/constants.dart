@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 const Color primaryColor = Color.fromARGB(255, 34, 34, 34);
-const Color secundaryColor = Colors.white;
+
+const Color secondaryColor = Colors.white;
+
 
 const Color alertColor = Colors.redAccent;
 const Icon alertIcon = Icon(Icons.warning_amber_rounded, color: alertColor);
@@ -24,7 +26,10 @@ const Text userDiabledText = Text('La cuenta ha sido desactivada temporalmente.'
 
 //User page
 const Text askIsSure = Text('¿Estás seguro de querer eliminar este usuario?',style: TextStyle(color: Colors.white), textAlign: TextAlign.center);
+const Text requireRecentLoginText = Text('Requiere logearse de nuevo',style: TextStyle(color: Colors.white), textAlign: TextAlign.center);
+const Text successUpdatePasswordText = Text('Usted ha cambiado la contraseña correctamente',style: TextStyle(color: Colors.white), textAlign: TextAlign.center);
 const Text confirmDeleteText = Text("Eliminar", style: TextStyle(color: alertColor));
+
 
 //Exercise page
 const Text askIsSureExercise = Text('¿Estás seguro de querer eliminar este ejercicio?',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);

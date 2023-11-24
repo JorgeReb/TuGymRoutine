@@ -26,10 +26,10 @@ class UserPage extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
           child: Container(
-            color: primaryColor,
+            color: Theme.of(context).colorScheme.background,
             child: FadeInDown(
               delay: const Duration(milliseconds: 300),
               child: Column(
@@ -56,7 +56,7 @@ class _InfoUser extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, top: 60, bottom: 35),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary, borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
         height: 175,
         child: Padding(
@@ -114,7 +114,7 @@ class _FormUserState extends State<_FormUser> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary, borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
         height: 350,
         child: Padding(
@@ -130,7 +130,7 @@ class _FormUserState extends State<_FormUser> {
                       _CustomInputField(
                         controller: nameCtrl,
                         label: 'Nombre',
-                        icon: const Icon(Icons.account_circle_rounded,color: primaryColor),
+                        icon: Icon(Icons.account_circle_rounded,color: Theme.of(context).colorScheme.background),
                         isEnabled: state.isEnabled,
                         validator: validateName
                       ),
@@ -138,7 +138,7 @@ class _FormUserState extends State<_FormUser> {
                       _CustomInputField(
                         controller: emailCtrl,
                         label: 'Email',
-                        icon: const Icon(Icons.email, color: primaryColor),
+                        icon: Icon(Icons.email, color: Theme.of(context).colorScheme.background),
                         isEnabled: state.isEnabled,
                         validator: validateEmail
                       ),
@@ -146,7 +146,7 @@ class _FormUserState extends State<_FormUser> {
                       _CustomInputField(
                         controller: weightCtrl,
                         label: 'Peso',
-                        icon: const Icon(Icons.email, color: primaryColor),
+                        icon: Icon(Icons.email, color: Theme.of(context).colorScheme.background),
                         isEnabled: state.isEnabled,
                         validator: validateWeight
                       ),
@@ -154,7 +154,7 @@ class _FormUserState extends State<_FormUser> {
                       _CustomInputField(
                         controller: heightCtrl,
                         label: 'Altura',
-                        icon: const Icon(Icons.email, color: primaryColor),
+                        icon: Icon(Icons.email, color: Theme.of(context).colorScheme.background),
                         isEnabled: state.isEnabled,
                         validator: validateHeight
                       ),
@@ -175,7 +175,7 @@ class _FormUserState extends State<_FormUser> {
                         style: const ButtonStyle(
                           fixedSize:MaterialStatePropertyAll(Size(115, 20)),
                           backgroundColor:MaterialStatePropertyAll(Colors.blue)),
-                          child: const Text('Modificar',style: TextStyle(color: secundaryColor)
+                          child: const Text('Modificar',style: TextStyle(color: Colors.white)
                         ),
                       ),
                     ],
@@ -209,20 +209,20 @@ class _CustomInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: const TextStyle(color: primaryColor),
+      style: TextStyle(color: Theme.of(context).colorScheme.background),
       controller: controller,
       enabled: isEnabled,
-      cursorColor: primaryColor,
+      cursorColor: Theme.of(context).colorScheme.background,
       validator: validator,
       decoration: InputDecoration(
         errorStyle: TextStyle(color: Colors.redAccent.withOpacity(0.6)),
         errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
         border: const UnderlineInputBorder(),
+        label: Text(label, style: TextStyle(color: Theme.of(context).colorScheme.background)),
         suffixIcon: icon,
-        labelText: label,
-        labelStyle: const TextStyle(color: primaryColor),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2,color: primaryColor)),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2,color: primaryColor)),
+        labelStyle:  TextStyle(color: Theme.of(context).colorScheme.background),
+        focusedBorder:  UnderlineInputBorder(borderSide: BorderSide(width: 1,color: Theme.of(context).colorScheme.background)),
+        enabledBorder:  UnderlineInputBorder(borderSide: BorderSide(width: 1,color: Theme.of(context).colorScheme.background)),
       ),
     );
   }
@@ -239,10 +239,10 @@ class _UserImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipOval(
       child: Container(
-        color: primaryColor,
+        color: Theme.of(context).colorScheme.background,
         child: Image.network(
           image,
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.secondary,
           width: 100,
           height: 100,
         ),
@@ -260,7 +260,7 @@ class _UserName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
-      child: Text(name,style: const TextStyle(color: primaryColor, fontSize: 20),
+      child: Text(name,style: TextStyle(color: Theme.of(context).colorScheme.background, fontSize: 20),
       ),
     );
   }

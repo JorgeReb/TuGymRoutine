@@ -16,7 +16,7 @@ class _ListUserViewState extends State<ListUserView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primaryColor,
+      color: Theme.of(context).colorScheme.background,
       height: double.infinity,
       width: double.infinity,
       child: SingleChildScrollView(
@@ -90,26 +90,26 @@ class _UsersTableState extends State<UsersTable> {
   @override
   Widget build(BuildContext context) {
     final columns = <DataColumn>[
-      const DataColumn(label: Padding(padding: EdgeInsets.only(left:15.0),child: Text('Nombre', style: TextStyle(color: primaryColor),))),
-      const DataColumn(label: Padding(padding: EdgeInsets.only(left:27.0),child: Text('Email', style: TextStyle(color: primaryColor),))),
-      const DataColumn(label: Text('Peso', style: TextStyle(color: primaryColor),)),
-      const DataColumn(label: Text('Altura', style: TextStyle(color: primaryColor),)),
-      const DataColumn(label: Text('Visualizar', style: TextStyle(color: primaryColor),)),
+      DataColumn(label: Padding(padding: const EdgeInsets.only(left:15.0),child: Text('Nombre', style: TextStyle(color: Theme.of(context).colorScheme.background),))),
+      DataColumn(label: Padding(padding: const EdgeInsets.only(left:27.0),child: Text('Email', style: TextStyle(color: Theme.of(context).colorScheme.background),))),
+      DataColumn(label: Text('Peso', style: TextStyle(color: Theme.of(context).colorScheme.background),)),
+      DataColumn(label: Text('Altura', style: TextStyle(color: Theme.of(context).colorScheme.background),)),
+      DataColumn(label: Text('Visualizar', style: TextStyle(color: Theme.of(context).colorScheme.background),)),
     ];
 
     final rows = _filteredUsuarios.map((user) {
       return DataRow(
         cells: <DataCell>[
-          DataCell(Padding(padding: const EdgeInsets.only(left: 8.0),child: Text(user.name, style: const TextStyle(color: secundaryColor)))),
-          DataCell(Text(user.email, style: const TextStyle(color: secundaryColor))),
-          DataCell(Padding(padding: const EdgeInsets.only(left: 5.0),child: Text(user.weight.toString(), style: const TextStyle(color: secundaryColor)),)),
-          DataCell(Padding(padding: const EdgeInsets.only(left:10.0),child: Text(user.height.toString(), style: const TextStyle(color: secundaryColor)),)),
-          DataCell(const Padding(padding: EdgeInsets.only(left:15.0),child: Icon(Icons.remove_red_eye_outlined, color: secundaryColor,)
+          DataCell(Padding(padding: const EdgeInsets.only(left: 8.0),child: Text(user.name, style: TextStyle(color: Theme.of(context).colorScheme.background)))),
+          DataCell(Text(user.email, style: TextStyle(color: Theme.of(context).colorScheme.background))),
+          DataCell(Padding(padding: const EdgeInsets.only(left: 5.0),child: Text(user.weight.toString(), style: TextStyle(color: Theme.of(context).colorScheme.background)),)),
+          DataCell(Padding(padding: const EdgeInsets.only(left:10.0),child: Text(user.height.toString(), style: TextStyle(color: Theme.of(context).colorScheme.background)),)),
+          DataCell(Padding(padding: const EdgeInsets.only(left:15.0),child: Icon(Icons.remove_red_eye_outlined, color: Theme.of(context).colorScheme.background,)
           ), 
           onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => UserPage(user: user,)))
           ),
         ],
-        color: MaterialStateColor.resolveWith((states) => primaryColor),
+        
       );
     }).toList();
 
@@ -117,16 +117,16 @@ class _UsersTableState extends State<UsersTable> {
       children: [
         Padding(
           padding:
-            const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
+            const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 30),
           child: TextField(
             controller: _searchController,
-            style: const TextStyle(color: secundaryColor),
-            cursorColor: secundaryColor,
-            decoration: const InputDecoration(
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: secundaryColor)),
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            cursorColor: Theme.of(context).colorScheme.secondary,
+            decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
               labelText: 'Buscar por nombre',
-              labelStyle: TextStyle(color: secundaryColor),
-              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: secundaryColor)),
+              labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
             ),
             onChanged: (value) {
               _filterUsuarios(value);
@@ -134,9 +134,9 @@ class _UsersTableState extends State<UsersTable> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: PaginatedDataTable(
-            arrowHeadColor: primaryColor,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          child: PaginatedDataTable(   
+            arrowHeadColor: Theme.of(context).colorScheme.background,
             horizontalMargin: 25,
             columnSpacing: 45,
             columns: columns,

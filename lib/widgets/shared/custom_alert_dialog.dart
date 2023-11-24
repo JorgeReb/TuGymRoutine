@@ -16,10 +16,11 @@ class CustomAlertDialog extends StatelessWidget {
       duration: const Duration(milliseconds:300),
       child: AlertDialog(
         icon: icon,
-        backgroundColor:  const Color.fromARGB(255, 37, 37, 37),
+        backgroundColor:  Theme.of(context).colorScheme.background,
+        surfaceTintColor: Theme.of(context).colorScheme.background,
         content:   SizedBox(
             width: 50.0,
-            height: 70.0,
+            height: 72.0,
             child:  Column(
               children: [
                 text,

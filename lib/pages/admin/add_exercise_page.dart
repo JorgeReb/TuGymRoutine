@@ -1,7 +1,12 @@
+
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:tu_gym_routine/blocs/exercise_admin/exercise_admin_bloc.dart';
 import 'package:tu_gym_routine/constants/constants.dart';
@@ -18,7 +23,7 @@ class AddExercisePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         child: FadeInDown(
           delay: const Duration(milliseconds: 300),
@@ -57,6 +62,16 @@ class _FormExerciseState extends State<_FormExercise> {
   bool isEnabled = false;
   bool isLoading = false;
 
+  void _pickImage() async{
+    final XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(image == null) return;
+
+    Uint8List imagebyte = await image.readAsBytes();
+    String base64 = base64Encode(imagebyte);
+    print(base64);
+    imageValue = base64;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -64,10 +79,11 @@ class _FormExerciseState extends State<_FormExercise> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: theme.secondary, borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
         height: 650,
         child: Padding(
@@ -84,14 +100,14 @@ class _FormExerciseState extends State<_FormExercise> {
                     CustomAdminInputField(
                         controller: nameCtrl,
                         isEnabled: true,
-                        icon: const Icon(FontAwesomeIcons.dumbbell,color: primaryColor, size: 15),
+                        icon: Icon(FontAwesomeIcons.dumbbell,color: theme.background, size: 15),
                         validator: validateUpdateInputsExercise),
                     const SizedBox(height: 5),
                     const FormLabelInput(name: 'Descripción'), 
                     CustomAdminInputField(
                       controller: descriptionCtrl,
                       isEnabled: true,
-                      icon: const Icon(Icons.description_rounded,color: primaryColor, size: 17),
+                      icon:  Icon(Icons.description_rounded,color: theme.background, size: 17),
                       validator: validateUpdateInputsExercise,
                     ),
                     const SizedBox(height: 5),
@@ -99,39 +115,35 @@ class _FormExerciseState extends State<_FormExercise> {
                     _SelectItems(
                       onItemSelected: (value) => setState(() => typeValue = value),
                       items: types,
-                      icon: const Icon(Icons.type_specimen, color: primaryColor),
+                      icon:  Icon(Icons.type_specimen, color: theme.background),
                     ),
                     const SizedBox(height: 5),
                     const FormLabelInput(name: 'Músculos'),
                     _SelectItems(
                       onItemSelected: (value) => setState(() => muscleValue = value),
                       items: muscles,
-                      icon: const Icon(FontAwesomeIcons.childReaching,color: primaryColor),
+                      icon:  Icon(FontAwesomeIcons.childReaching,color: theme.background),
                     ),
                     const SizedBox(height: 5),
                     const FormLabelInput(name: 'Imagen'),
-                    _SelectItems(
-                      onItemSelected: (value) => setState(() => imageValue = value),
-                      items: equipments,
-                      icon: const Icon(Icons.image, color: primaryColor),
-                    ),
+                    TextButton(onPressed: () => _pickImage(), child: const Text('Subir imagen')),
                     const SizedBox(height: 5),
                     const FormLabelInput(name: 'Equipamiento'),
                     _SelectItems(
                       onItemSelected: (value) => setState(() => equipmentValue = value),
-                      items: equipments,icon: const Icon(FontAwesomeIcons.screwdriverWrench,color: primaryColor),
+                      items: equipments,icon:  Icon(FontAwesomeIcons.screwdriverWrench,color: theme.background),
                     ),
                     const SizedBox(height: 5),
                     const FormLabelInput(name: 'Dificultades'),
                     _SelectItems(
                       onItemSelected: (value) => setState(() => difficultyValue = value),
-                      items: difficulties, icon: const Icon(Icons.equalizer, color: primaryColor),
+                      items: difficulties, icon:  Icon(Icons.equalizer, color: theme.background),
                     ),
                     const SizedBox(height: 5),
                     const FormLabelInput(name: 'Objetivos'),
                     _SelectItems(
                         onItemSelected: (value) => setState(() => objectiveValue = value),
-                        items: objectives,icon: const Icon(FontAwesomeIcons.bullseye,color: primaryColor)
+                        items: objectives,icon:  Icon(FontAwesomeIcons.bullseye,color: theme.background)
                     ),
                     addExerciseButton(context),                      
                   ]),
@@ -143,6 +155,8 @@ class _FormExerciseState extends State<_FormExercise> {
       ),
     );
   }
+
+  
 
   Padding addExerciseButton(BuildContext context) {
     return Padding(
@@ -170,10 +184,11 @@ class _FormExerciseState extends State<_FormExercise> {
           }
         },
         style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(115, 20)),backgroundColor: MaterialStatePropertyAll(Colors.blue)),
-        child: const Text('Añadir', style: TextStyle(color: secundaryColor))
+        child: const Text('Añadir', style: TextStyle(color: Colors.white))
       ),
     );
   }
+
 }
 
 
@@ -211,16 +226,16 @@ class _SelectItemsState extends State<_SelectItems> {
         return DropdownMenuItem(
           alignment: Alignment.centerLeft,
           value: item,
-          child: Text(item, overflow: TextOverflow.ellipsis),
+          child: Text(item, overflow: TextOverflow.ellipsis, style: TextStyle(color: Theme.of(context).colorScheme.background),),
         );
       }).toList(),
-      focusColor: primaryColor,
-      dropdownColor: secundaryColor,
+      focusColor: Theme.of(context).colorScheme.background,
+      dropdownColor: Theme.of(context).colorScheme.secondary,
       decoration: InputDecoration( 
         errorStyle: TextStyle(color: Colors.redAccent.withOpacity(0.6)),
         errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.background)),
+        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.background)),
       ),
       borderRadius: BorderRadius.circular(20),
       isExpanded: true,

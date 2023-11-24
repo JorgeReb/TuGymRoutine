@@ -26,8 +26,8 @@ class UserActionsButtons extends StatelessWidget {
           IsAdminButton(user: user),
           TextButton(
             onPressed: () => BlocProvider.of<UserAdminBloc>(context).add(ChangeEnabledInputs(isEnabled: true)),
-            style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(115, 20)),backgroundColor: MaterialStatePropertyAll(Colors.green)),
-            child: const Text('Modificar usuario',style: TextStyle(color: secundaryColor))
+            style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(135, 20)),backgroundColor: MaterialStatePropertyAll(Colors.green)),
+            child: const Text('Modificar usuario',style: TextStyle(color: Colors.white))
           ),
           deleteUserButton(isSure, context),
         ],
@@ -57,8 +57,8 @@ class UserActionsButtons extends StatelessWidget {
           ),
         ).showCustomDialog(context);
       },
-      style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(115, 20)),backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
-      child: const Text('Eliminar usuario',style: TextStyle(color: secundaryColor)),
+      style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(135, 20)),backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
+      child: const Text('Eliminar usuario',style: TextStyle(color: Colors.white)),
     );
   }
 }
