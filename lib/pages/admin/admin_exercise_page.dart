@@ -34,12 +34,14 @@ class ExercisePage extends StatefulWidget {
 class _ExercisePageState extends State<ExercisePage> {
   Future<String> getImageFS() async {
     try {
-      final storageRef = FirebaseStorage.instance.ref().child(widget.exercise.image);
+      final storageRef =
+          FirebaseStorage.instance.ref().child(widget.exercise.image);
 
       final publicUrl = storageRef.getDownloadURL();
       return await publicUrl;
     } on FirebaseException catch (e) {
-      if (e.message == "No object exists at the desired reference.") return 'Error';
+      if (e.message == "No object exists at the desired reference.")
+        return 'Error';
       return '';
     }
   }
@@ -69,7 +71,7 @@ class _ExercisePageState extends State<ExercisePage> {
               future: getImageFS(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const Text('');
                 } else {
                   final imagen = snapshot.data!;
                   return Container(
@@ -109,7 +111,7 @@ class _FormExerciseState extends State<_FormExercise> {
   late String typeValue;
   late String muscleValue;
   late String imageValue;
-  late String auxImage; 
+  late String auxImage;
   late String equipmentValue;
   late String difficultyValue;
   late String objectiveValue;
@@ -130,7 +132,8 @@ class _FormExerciseState extends State<_FormExercise> {
   }
 
   void _pickImage() async {
-    final XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final XFile? image =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
 
     Uint8List imagebyte = await image.readAsBytes();
@@ -149,14 +152,15 @@ class _FormExerciseState extends State<_FormExercise> {
             color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
-        height: 450,
+        height: 415,
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Form(
             autovalidateMode: AutovalidateMode.always,
             key: exerciseForm,
             child: BlocBuilder<ExerciseAdminBloc, ExerciseAdminState>(
               builder: (context, state) {
+                final isEnabled = state.isEnabled;
                 return SingleChildScrollView(
                   child: Expanded(
                     child: Padding(
@@ -205,13 +209,7 @@ class _FormExerciseState extends State<_FormExercise> {
                                 color:
                                     Theme.of(context).colorScheme.background),
                           ),
-                          const SizedBox(height: 10),
-                          const FormLabelInput(name: 'Imagen'),
-                          TextButton(
-                            onPressed: () => _pickImage(),
-                            child: const Text('Subir imagen')
-                          ),
-                          const SizedBox(height: 10),
+                             const SizedBox(height: 10),
                           const FormLabelInput(name: 'Equipamiento'),
                           _SelectItems(
                             isEnabled: state.isEnabled,
@@ -247,6 +245,33 @@ class _FormExerciseState extends State<_FormExercise> {
                                 color:
                                     Theme.of(context).colorScheme.background),
                           ),
+                          Row(
+                            children: [
+                              const FormLabelInput(name: 'Imagen'),
+                              const SizedBox(width: 50),
+                              IgnorePointer(
+                                ignoring: isEnabled ? false : true,
+                                child: TextButton(
+                                    onPressed: () => _pickImage(),
+                                    child: Text(
+                                      'Subir imagen',
+                                      style: TextStyle(
+                                          color: isEnabled
+                                              ? Colors.blue
+                                              : Colors.grey.shade400,
+                                          fontWeight: FontWeight.w400),
+                                    )),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 108.0),
+                                child: Icon(
+                                  Icons.image,
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                ),
+                              )
+                            ],
+                          ),
                           if (state.isEnabled) acceptUpdateButton(context)
                         ],
                       ),
@@ -263,12 +288,12 @@ class _FormExerciseState extends State<_FormExercise> {
 
   Padding acceptUpdateButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0),
+      padding: const EdgeInsets.only(top: 20.0, bottom: 10),
       child: TextButton(
           onPressed: () async {
             if (exerciseForm.currentState!.validate()) {
               try {
-                if(imageValue == auxImage) imageValue = auxImage;
+                if (imageValue == auxImage) imageValue = auxImage;
                 await ExerciseService().updateExercise(
                     widget.exercise.exerciseId,
                     nameCtrl.text,
@@ -278,8 +303,7 @@ class _FormExerciseState extends State<_FormExercise> {
                     imageValue,
                     equipmentValue,
                     difficultyValue,
-                    objectiveValue
-                );
+                    objectiveValue);
                 context
                     .read<ExerciseAdminBloc>()
                     .add(ChangeEnabledInputs(isEnabled: false));
@@ -289,7 +313,7 @@ class _FormExerciseState extends State<_FormExercise> {
               } catch (e) {
                 return;
               }
-            } 
+            }
           },
           style: const ButtonStyle(
               fixedSize: MaterialStatePropertyAll(Size(115, 20)),
@@ -360,7 +384,7 @@ class _SelectItemsState extends State<_SelectItems> {
                 borderSide: BorderSide(
                     color: widget.isEnabled
                         ? Theme.of(context).colorScheme.background
-                        : Theme.of(context).colorScheme.secondary,
+                        : Colors.grey.shade400,
                     width: widget.isEnabled ? 1 : 0.5)),
             focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -393,46 +417,73 @@ class _InfoExercise extends StatefulWidget {
 class _InfoExerciseState extends State<_InfoExercise> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 50, bottom: 25),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
-            borderRadius: BorderRadius.circular(20)),
-        width: double.infinity,
-        height: 210,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 200,
-                child: Column(
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: (widget.imagen != "Error")
-                            ? CachedNetworkImage(
-                                imageUrl: widget.imagen,
-                                width: 160,
-                                height: 130,
-                              )
-                            : Image.asset(
-                                width: 130,
-                                height: 130,
-                                'assets/foto_login.png',
-                                alignment: Alignment.center,
-                              )),
-                    _ExerciseName(widget.exercise.name)
-                  ],
-                ),
-              ),
-              _ActionsButtons(widget.exercise),
-            ],
-          ),
+    const imageBackgroundColor = primaryColor;
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: Container(
+                  height: 215,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                      color: imageBackgroundColor,
+                      boxShadow: [BoxShadow(blurRadius: 15)]),
+                  child: (widget.imagen != "Error")
+                      ? CachedNetworkImage(
+                          imageUrl: widget.imagen,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          fit: BoxFit.cover,
+                          'assets/foto_login.png',
+                          alignment: Alignment.center,
+                        )),
+            ),
+          ],
         ),
-      ),
+        _ActionsButtons(widget.exercise)
+      ],
     );
+    // return Padding(
+    //   padding: const EdgeInsets.only(left: 15, right: 15, top: 50, bottom: 25),
+    //   child: Container(
+    //     decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary,borderRadius: BorderRadius.circular(20)),
+    //     width: double.infinity,
+    //     height: 210,
+    //     child: Padding(
+    //       padding: const EdgeInsets.only(top: 10),
+    //       child: Row(
+    //         children: [
+    //           SizedBox(
+    //             width: 200,
+    //             child: Column(
+    //               children: [
+    //                 Padding(
+    //                     padding: const EdgeInsets.only(top: 5),
+    //                     child: (widget.imagen != "Error")
+    //                         ? CachedNetworkImage(
+    //                             imageUrl: widget.imagen,
+    //                             width: 160,
+    //                             height: 130,
+    //                           )
+    //                         : Image.asset(
+    //                             width: 130,
+    //                             height: 130,
+    //                             'assets/foto_login.png',
+    //                             alignment: Alignment.center,
+    //                           )),
+    //                 _ExerciseName(widget.exercise.name)
+    //               ],
+    //             ),
+    //           ),
+    //           _ActionsButtons(widget.exercise),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
 
@@ -463,16 +514,18 @@ class _ActionsButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isSure = false;
-    return Padding(
-      padding: const EdgeInsets.only(top: 35),
-      child: Column(
-        children: [
-          _updateExerciseButton(context),
-          const SizedBox(width: 20),
-          _deleteExerciseButton(isSure, context),
-        ],
-      ),
-    );
+    return Builder(builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 20, left: 40),
+        child: Row(
+          children: [
+            _updateExerciseButton(context),
+            const SizedBox(width: 20),
+            _deleteExerciseButton(isSure, context),
+          ],
+        ),
+      );
+    });
   }
 
   TextButton _updateExerciseButton(BuildContext context) {
@@ -480,7 +533,7 @@ class _ActionsButtons extends StatelessWidget {
         onPressed: () => BlocProvider.of<ExerciseAdminBloc>(context)
             .add(ChangeEnabledInputs(isEnabled: true)),
         style: const ButtonStyle(
-            fixedSize: MaterialStatePropertyAll(Size(135, 20)),
+            fixedSize: MaterialStatePropertyAll(Size(145, 20)),
             backgroundColor: MaterialStatePropertyAll(Colors.blue)),
         child: const Text('Modificar ejercicio',
             style: TextStyle(color: Colors.white)));
@@ -512,7 +565,7 @@ class _ActionsButtons extends StatelessWidget {
         ).showCustomDialog(context);
       },
       style: const ButtonStyle(
-          fixedSize: MaterialStatePropertyAll(Size(135, 20)),
+          fixedSize: MaterialStatePropertyAll(Size(145, 20)),
           backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
       child: const Text('Eliminar ejercicio',
           style: TextStyle(color: Colors.white)),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tu_gym_routine/blocs/user_admin/user_admin_bloc.dart';
-import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'package:tu_gym_routine/pages/admin/admin_page.dart';
 import 'package:tu_gym_routine/services/user_service.dart';
@@ -164,7 +163,7 @@ class _FormUserState extends State<_FormUser> {
                       TextButton(
                         onPressed: () async {
                           if (userForm.currentState!.validate()) {
-                            await UserService().updateUser(widget.user.id,emailCtrl.text.trim(), nameCtrl.text, double.parse(weightCtrl.text), double.parse(heightCtrl.text));
+                             await UserService().updateUser(widget.user.id,emailCtrl.text.trim(), nameCtrl.text, double.parse(weightCtrl.text), double.parse(heightCtrl.text));
                             // ignore: use_build_context_synchronously
                             context.read<UserAdminBloc>().add(ChangeEnabledInputs(isEnabled: false));
                           } else {

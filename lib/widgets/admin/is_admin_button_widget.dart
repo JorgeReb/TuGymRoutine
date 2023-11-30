@@ -51,7 +51,7 @@ class _IsAdminButton extends State<IsAdminButton> {
                   await UserService().removeAdminPrivileges(auth.currentUser!, widget.user.id, widget.user.email, widget.user.name);
                   setState(() => isAdmin = false);
                 },
-                style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(135, 20)),backgroundColor: MaterialStatePropertyAll(Color.fromARGB(255, 240, 180, 2))),
+                style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(145, 20)),backgroundColor: MaterialStatePropertyAll(Color.fromARGB(255, 240, 180, 2))),
                 child: const Text('Quitar privilegios',style: TextStyle(color: secondaryColor)))
             : TextButton(
                 onPressed: () async{
@@ -59,7 +59,7 @@ class _IsAdminButton extends State<IsAdminButton> {
                   await UserService().addAdminPrivileges(auth.currentUser!, widget.user.id);
                   setState(() => isAdmin = true);
                 },
-                style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(135, 20)),backgroundColor: MaterialStatePropertyAll(Colors.indigo)),
+                style: const ButtonStyle(fixedSize: MaterialStatePropertyAll(Size(145, 20)),backgroundColor: MaterialStatePropertyAll(Colors.indigo)),
                 child: const Text('Dar privilegios',style: TextStyle(color: secondaryColor))),
       ],
     );

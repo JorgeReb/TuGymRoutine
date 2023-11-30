@@ -1,3 +1,5 @@
+export 'package:tu_gym_routine/views/user/create_routine_view.dart';
+export 'package:tu_gym_routine/views/user/workouts_view.dart';
 export 'package:tu_gym_routine/views/admin/list_exercise_view.dart';
 export 'package:tu_gym_routine/views/admin/list_user_view.dart';
 export 'package:tu_gym_routine/views/logo_view.dart';

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:tu_gym_routine/models/exercise.dart';
+import 'package:tu_gym_routine/models/workout.dart';
 
 class ExerciseService {
   final dio = Dio();
@@ -17,6 +18,21 @@ class ExerciseService {
       exercises.add(exercise);
     }
     return exercises;
+  }
+
+  getWorkouts() async{
+    List<Workout> workouts = [];
+    QuerySnapshot queryWorkout = await FirebaseFirestore.instance.collection('workouts').get(); 
+     for (var document in queryWorkout.docs) {
+      final Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+      if(data != null){
+        final Workout workout = Workout.fromMap({'workoutId': document.id, ...data});
+        workouts.add(workout);
+      }else{
+        return null;
+      }
+    }
+      return workouts;
   }
 
   addExercise(

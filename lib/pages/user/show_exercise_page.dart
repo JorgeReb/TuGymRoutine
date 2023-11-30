@@ -17,12 +17,12 @@ class _ShowExercisePageState extends State<ShowExercisePage> {
   Future<String> getImageFS() async {
     try {
       final storageRef = FirebaseStorage.instance.ref().child(widget.exercise.image);
-
       final publicUrl = storageRef.getDownloadURL();
+
       return await publicUrl;
     } on FirebaseException catch (e) {
       if (e.message == "No object exists at the desired reference.") return 'Error';
-      return '';
+      return 'Error';
     }
   }
 
@@ -39,83 +39,88 @@ class _ShowExercisePageState extends State<ShowExercisePage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: FadeInDown(
         delay: const Duration(milliseconds: 200),
-        child: FutureBuilder(
-            future: getImageFS(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else {
-                final image = snapshot.data!;
-                return Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                            height: 250,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(color: imageBackgroundColor,boxShadow: [BoxShadow(blurRadius: 15)]),
-                            child: (image != "Error")
-                                ? CachedNetworkImage(
-                                    imageUrl: image,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset(
-                                    'assets/foto_nombre.png',
-                                    alignment: Alignment.center,
-                                  )),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, top: 40),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
+        child: SingleChildScrollView(
+          child: FutureBuilder(
+              future: getImageFS(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(child: CircularProgressIndicator()));
+                } else {
+                  final image = snapshot.data!;
+                  return Column(
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                              height: 250,
+                              width: double.infinity,
+                              decoration: const BoxDecoration(color: imageBackgroundColor,boxShadow: [BoxShadow(blurRadius: 15)]),
+                              child: (image != "Error")
+                                  ? CachedNetworkImage(
+                                      imageUrl: image,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'assets/foto_nombre.png',
+                                      alignment: Alignment.center,
+                                    )),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, top: 40),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                // Navegar a la página anterior al presionar el botón
+                                Navigator.pop(context);
+                              },
                             ),
-                            onPressed: () {
-                              // Navegar a la página anterior al presionar el botón
-                              Navigator.pop(context);
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        widget.exercise.name,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w200),
-                        textAlign: TextAlign.center,
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    _ExerciseProperty(property: widget.exercise.description),
-                    const SizedBox(height: 30),
-                    _ExerciseProperty(
-                        property:
-                            "Tipo de ejercicio:  ${widget.exercise.type}"),
-                    const SizedBox(height: 30),
-                    _ExerciseProperty(
-                        property:
-                            "Músculos que intervienen:  ${widget.exercise.muscle}"),
-                    const SizedBox(height: 30),
-                    _ExerciseProperty(
-                        property:
-                            "Equipamiento necesario:  ${widget.exercise.equipment}"),
-                    const SizedBox(height: 30),
-                    _ExerciseProperty(
-                        property:
-                            "Dificultad del ejercicio:  ${widget.exercise.difficulty}"),
-                    const SizedBox(height: 30),
-                    _ExerciseProperty(
-                        property:
-                            "Objetivos del ejercicio:  ${widget.exercise.objective}"),
-                  ],
-                );
-              }
-            }),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          widget.exercise.name,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w200),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      _ExerciseProperty(property: widget.exercise.description),
+                      const SizedBox(height: 30),
+                      _ExerciseProperty(
+                          property:
+                              "Tipo de ejercicio:  ${widget.exercise.type}"),
+                      const SizedBox(height: 30),
+                      _ExerciseProperty(
+                          property:
+                              "Músculos que intervienen:  ${widget.exercise.muscle}"),
+                      const SizedBox(height: 30),
+                      _ExerciseProperty(
+                          property:
+                              "Equipamiento necesario:  ${widget.exercise.equipment}"),
+                      const SizedBox(height: 30),
+                      _ExerciseProperty(
+                          property:
+                              "Dificultad del ejercicio:  ${widget.exercise.difficulty}"),
+                      const SizedBox(height: 30),
+                      _ExerciseProperty(
+                          property:
+                              "Objetivos del ejercicio:  ${widget.exercise.objective}"),
+                      const SizedBox(height: 30),
+                    ],
+                  );
+                }
+              }),
+        ),
       ),
     );
   }
@@ -144,36 +149,3 @@ class _ExerciseProperty extends StatelessWidget {
   }
 }
 
-class _ExerciseImage extends StatelessWidget {
-  final String image;
-
-  const _ExerciseImage(this.image);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-            height: 250,
-            decoration:
-                const BoxDecoration(boxShadow: [BoxShadow(blurRadius: 20)]),
-            child: Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: CachedNetworkImage(imageUrl: image))),
-        Padding(
-          padding: const EdgeInsets.only(left: 10, top: 40),
-          child: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              // Navegar a la página anterior al presionar el botón
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}

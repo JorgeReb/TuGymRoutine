@@ -14,7 +14,7 @@ class CustomInputField extends StatelessWidget {
     required this.icon,
     required this.isObscureText, 
     required this.controller,
-    required this.validator
+    required this.validator,
   });
 
   @override

@@ -20,7 +20,7 @@ class CustomAlertDialog extends StatelessWidget {
         surfaceTintColor: Theme.of(context).colorScheme.background,
         content:   SizedBox(
             width: 50.0,
-            height: 72.0,
+            height: 76.0,
             child:  Column(
               children: [
                 text,
@@ -31,8 +31,8 @@ class CustomAlertDialog extends StatelessWidget {
           ),
         buttonPadding: const EdgeInsets.all(0),
         contentPadding:
-          const EdgeInsets.only(top: 15, left: 5, right: 5, bottom: 0),
-          iconPadding: const EdgeInsets.only(bottom: 10, top: 12),
+          const EdgeInsets.only(top: 1, left: 5, right: 5, bottom: 0),
+          iconPadding: const EdgeInsets.only(bottom: 15, top: 15),
         actions: [
           Center(child: textButton),
         ],

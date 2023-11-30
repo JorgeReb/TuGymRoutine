@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:tu_gym_routine/blocs/user/user_bloc.dart';
-import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'package:tu_gym_routine/pages/pages.dart';
 import 'package:tu_gym_routine/services/user_service.dart';

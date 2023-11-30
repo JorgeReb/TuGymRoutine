@@ -67,7 +67,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   padding: const EdgeInsets.only(left: 60, right: 60, top: 40),
                   child: CustomInputField(
                     controller: passwordCtrl,
-                    nombreCampo: 'Contraseña',
+                    nombreCampo: 'Nueva contraseña',
                     icon: Icons.password,
                     isObscureText: true,
                     validator: validatePassword,

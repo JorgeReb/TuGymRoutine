@@ -33,6 +33,7 @@ const Text confirmDeleteText = Text("Eliminar", style: TextStyle(color: alertCol
 
 //Exercise page
 const Text askIsSureExercise = Text('¿Estás seguro de querer eliminar este ejercicio?',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);
+const Text imageNotSelected = Text('Debes seleccionar una imagen para el ejercicio',style: TextStyle(color: Colors.white),textAlign: TextAlign.center);
 
 List<String> difficulties = <String>[
   "Principiante",

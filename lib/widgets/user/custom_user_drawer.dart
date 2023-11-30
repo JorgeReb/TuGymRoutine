@@ -32,7 +32,7 @@ class CustomUserDrawer extends StatelessWidget {
                   CustomListTile(
                     title: 'Crear rutina',
                     icon: FontAwesomeIcons.notesMedical,
-                    onTap: () => BlocProvider.of<UserBloc>(context).add(ChangeViewUserEvent(view: const ListUserView()))
+                    onTap: () => BlocProvider.of<UserBloc>(context).add(ChangeViewUserEvent(view: const CreateRoutineView()))
                   ),
                   CustomListTile(
                     title: 'Ver ejercicios',
@@ -42,12 +42,12 @@ class CustomUserDrawer extends StatelessWidget {
                   CustomListTile(
                     title: 'Entrenamientos',
                     icon: FontAwesomeIcons.dumbbell,
-                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const ListExerciseView()))
+                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const WorkoutsView()))
                   ),
                   CustomListTile(
                     title: 'Mis rutinas',
                     icon: Icons.calendar_today ,
-                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const ListExerciseView()))
+                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const LogoView()))
                   ),
                   CustomListTile(
                     title: 'Perfil',
