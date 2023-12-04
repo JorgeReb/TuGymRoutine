@@ -16,7 +16,7 @@ class ShowExercisePage extends StatefulWidget {
 class _ShowExercisePageState extends State<ShowExercisePage> {
   Future<String> getImageFS() async {
     try {
-      final storageRef = FirebaseStorage.instance.ref().child(widget.exercise.image);
+      final storageRef = FirebaseStorage.instance.ref().child(widget.exercise.image!);
       final publicUrl = storageRef.getDownloadURL();
 
       return await publicUrl;
@@ -85,7 +85,7 @@ class _ShowExercisePageState extends State<ShowExercisePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          widget.exercise.name,
+                          widget.exercise.name!,
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 30,
@@ -94,7 +94,7 @@ class _ShowExercisePageState extends State<ShowExercisePage> {
                         ),
                       ),
                       const SizedBox(height: 30),
-                      _ExerciseProperty(property: widget.exercise.description),
+                      _ExerciseProperty(property: widget.exercise.description!),
                       const SizedBox(height: 30),
                       _ExerciseProperty(
                           property:

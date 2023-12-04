@@ -5,21 +5,13 @@ class RoutineState {
   bool? showExercises;
   bool? exercisesChoosen;
   
-  String? routineName;
-  String? exerciseName;
-  int? series;
-  int? repetitions;
-  List? exercises = [];
+  Workout? workout;
 
   RoutineState({
     this.showInputName, 
     this.exercisesChoosen, 
     this.showExercises, 
-    this.routineName,
-    this.exerciseName,
-    this.series,
-    this.repetitions,
-    this.exercises,
+    this.workout
   });
 }
 

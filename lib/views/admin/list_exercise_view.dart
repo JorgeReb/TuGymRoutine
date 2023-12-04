@@ -81,7 +81,7 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
 
   void _filterExercises(String searchTerm) {
     setState(() {
-      filteredExercises = widget.exercises.where((exercise) => exercise.name.toLowerCase().contains(searchTerm.toLowerCase())).toList();
+      filteredExercises = widget.exercises.where((exercise) => exercise.name!.toLowerCase().contains(searchTerm.toLowerCase())).toList();
     });
   }
 
@@ -118,8 +118,8 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
                   onTap: () {
                     Navigator.push(context,MaterialPageRoute(builder: (context) => ExercisePage(exercise: filteredExercises[index])));
                   },
-                  title: Text(filteredExercises[index].name,style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
-                  subtitle: Text(filteredExercises[index].muscle,style: TextStyle(fontWeight: FontWeight.w100, color: Theme.of(context).colorScheme.secondary),maxLines: 2),
+                  title: Text(filteredExercises[index].name!,style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
+                  subtitle: Text(filteredExercises[index].muscle!,style: TextStyle(fontWeight: FontWeight.w100, color: Theme.of(context).colorScheme.secondary),maxLines: 2),
                   leading: Image.asset(
                     'assets/foto_login.png',
                     alignment: Alignment.center,

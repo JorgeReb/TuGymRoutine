@@ -1,31 +1,27 @@
 import 'dart:convert';
 
+import 'package:tu_gym_routine/models/exercise.dart';
+
 class Workout {
-  final String workoutId;
-  final String name;
-  final int numberOfExercises;
-  final Map<int, Map<String, dynamic>> exercise;
+  String? name;
+  int? numberOfExercises = 0;
+  Map<int, Exercise>? exercises = {};
  
-
   Workout({
-    required this.workoutId,
-    required this.name, 
-    required this.numberOfExercises, 
-    required this.exercise, 
-
+    this.name, 
+    this.numberOfExercises, 
+    this.exercises, 
   });
 
   Workout copyWith({
-    String? workoutId,
     String? name,
     int? numberOfExercises,
-    Map<int, Map<String, dynamic>>? exercise,
+    Map<int, Exercise>? exercises,
   }){
     return Workout(
-      workoutId: workoutId ?? this.workoutId,
       name: name ?? this.name, 
       numberOfExercises: numberOfExercises ?? this.numberOfExercises, 
-      exercise: exercise ?? this.exercise,
+      exercises: exercises ?? this.exercises,
     );
   }
 
@@ -34,29 +30,41 @@ class Workout {
   String toJson() => json.encode(toMap());
 
   factory Workout.fromMap(Map<String, dynamic> json) {  
-     Map<int, Map<String, dynamic>> exerciseList = {};
-
+    Map<int, Exercise> exerciseList = {};
     if (json['exercises'] != null) {
-      for (var key in json['exercises'].keys) {
-        final int exerciseKey = int.tryParse(key) ?? 0;
-        exerciseList[exerciseKey] = Map<String, dynamic>.from(json['exercises'][key] ?? {});
-      }
+      json['exercises'].forEach((key,value){
+        int index = int.parse(key);
+        exerciseList[index] = Exercise.fromMap(value);
+      });
     }
 
     return Workout(
-      workoutId: json["workoutId"] ?? '',
       name: json["name"] ?? '',
       numberOfExercises: json["number_of_exercises"] ?? 0,
-      exercise: exerciseList,
+      exercises: exerciseList,
   );
-
-  
   }
 
-  Map<String, dynamic> toMap() => {
-    "workoutId" : workoutId,
-    "name": name,
-    "numberOfExercises": numberOfExercises,
-    "exercise": exercise,
-  };
+
+  Map<String,dynamic> exerciseMap = {};
+
+  Map<String,dynamic> toMap() {
+
+    for (int i = 1; i < exercises!.length+1; i++) {
+       exerciseMap = {...exerciseMap,
+        i.toString():{
+          "name": exercises![i]!.name,
+          "series": exercises![i]!.series,
+          "repetitions": exercises![i]!.repetitions,
+        }
+      };
+    }
+   
+    final workoutConverted = {
+      "name": name,
+      "numberOfExercises": numberOfExercises,
+      "exercises": exerciseMap,
+    };
+    return workoutConverted;
+  }
 }

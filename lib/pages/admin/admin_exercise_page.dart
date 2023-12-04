@@ -34,14 +34,12 @@ class ExercisePage extends StatefulWidget {
 class _ExercisePageState extends State<ExercisePage> {
   Future<String> getImageFS() async {
     try {
-      final storageRef =
-          FirebaseStorage.instance.ref().child(widget.exercise.image);
+      final storageRef = FirebaseStorage.instance.ref().child(widget.exercise.image!);
 
       final publicUrl = storageRef.getDownloadURL();
       return await publicUrl;
     } on FirebaseException catch (e) {
-      if (e.message == "No object exists at the desired reference.")
-        return 'Error';
+      if (e.message == "No object exists at the desired reference.") return 'Error';
       return '';
     }
   }
@@ -122,13 +120,13 @@ class _FormExerciseState extends State<_FormExercise> {
     super.initState();
     descriptionCtrl = TextEditingController(text: widget.exercise.description);
     nameCtrl = TextEditingController(text: widget.exercise.name);
-    typeValue = widget.exercise.type;
-    muscleValue = widget.exercise.muscle;
-    imageValue = widget.exercise.image;
-    auxImage = widget.exercise.image;
-    equipmentValue = widget.exercise.equipment;
-    difficultyValue = widget.exercise.difficulty;
-    objectiveValue = widget.exercise.objective;
+    typeValue = widget.exercise.type!;
+    muscleValue = widget.exercise.muscle!;
+    imageValue = widget.exercise.image!;
+    auxImage = widget.exercise.image!;
+    equipmentValue = widget.exercise.equipment!;
+    difficultyValue = widget.exercise.difficulty!;
+    objectiveValue = widget.exercise.objective!;
   }
 
   void _pickImage() async {
@@ -189,7 +187,7 @@ class _FormExerciseState extends State<_FormExercise> {
                           const FormLabelInput(name: 'Tipos'),
                           _SelectItems(
                             isEnabled: state.isEnabled,
-                            initialValue: widget.exercise.type,
+                            initialValue: widget.exercise.type!,
                             onItemSelected: (value) =>
                                 setState(() => typeValue = value),
                             items: types,
@@ -201,7 +199,7 @@ class _FormExerciseState extends State<_FormExercise> {
                           const FormLabelInput(name: 'Músculo'),
                           _SelectItems(
                             isEnabled: state.isEnabled,
-                            initialValue: widget.exercise.muscle,
+                            initialValue: widget.exercise.muscle!,
                             onItemSelected: (value) =>
                                 setState(() => muscleValue = value),
                             items: muscles,
@@ -213,7 +211,7 @@ class _FormExerciseState extends State<_FormExercise> {
                           const FormLabelInput(name: 'Equipamiento'),
                           _SelectItems(
                             isEnabled: state.isEnabled,
-                            initialValue: widget.exercise.equipment,
+                            initialValue: widget.exercise.equipment!,
                             onItemSelected: (value) =>
                                 setState(() => equipmentValue = value),
                             items: equipments,
@@ -225,7 +223,7 @@ class _FormExerciseState extends State<_FormExercise> {
                           const FormLabelInput(name: 'Dificultad'),
                           _SelectItems(
                             isEnabled: state.isEnabled,
-                            initialValue: widget.exercise.difficulty,
+                            initialValue: widget.exercise.difficulty!,
                             onItemSelected: (value) =>
                                 setState(() => difficultyValue = value),
                             items: difficulties,
@@ -237,7 +235,7 @@ class _FormExerciseState extends State<_FormExercise> {
                           const FormLabelInput(name: 'Objetivo'),
                           _SelectItems(
                             isEnabled: state.isEnabled,
-                            initialValue: widget.exercise.objective,
+                            initialValue: widget.exercise.objective!,
                             onItemSelected: (value) =>
                                 setState(() => objectiveValue = value),
                             items: objectives,

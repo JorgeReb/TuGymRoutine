@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
+import 'package:tu_gym_routine/models/workout.dart';
 
 class UserService {
   final dio = Dio();
@@ -40,6 +41,8 @@ class UserService {
       return e;
     }
   }
+
+
 
   deleteUser(String uid) async {
     final response = await dio.post('https://deleteuser-ycxk3qq6za-uc.a.run.app', data: {"uid": uid});
