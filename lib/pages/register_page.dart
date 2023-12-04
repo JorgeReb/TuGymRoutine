@@ -12,7 +12,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 34, 34, 34),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -79,12 +79,16 @@ class _RegisterFormState extends State<_RegisterForm> {
           ),
           const SizedBox(height: 18),
           ElevatedButton(
+            style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                fixedSize: MaterialStatePropertyAll(Size(300, 30))
+            ),
             onPressed: () async {
               if (registerFormKey.currentState!.validate()) {
                 await registerUser();
               }
             },
-            child: const Text('Registrarse')
+            child: const Text('Registrarse', style: TextStyle(color: Colors.white),)
           ),
           const SizedBox(height: 5),
           const NavigateToLoginButton(),

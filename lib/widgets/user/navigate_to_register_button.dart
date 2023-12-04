@@ -11,7 +11,7 @@ class NavigateToRegisterButton extends StatelessWidget {
       onPressed: () => Navigator.pushNamed(context, "/register"),
       style: const ButtonStyle(side: MaterialStatePropertyAll(BorderSide.none),
       ),
-      child: const Text('¿No tienes cuenta? Regístrate',style: TextStyle(decoration: TextDecoration.underline,color: Colors.white70,),
+      child: Text('¿No tienes cuenta? Regístrate',style: TextStyle(decoration: TextDecoration.underline,color: Theme.of(context).colorScheme.secondary,),
       ),
     );
   }

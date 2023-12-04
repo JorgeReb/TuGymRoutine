@@ -20,7 +20,7 @@ class CustomAdminDrawer extends StatelessWidget {
         children: [
           const _Image(),
           const _AdminText(),
-          Container(height: 20,color: primaryColor),
+          Container(height: 20,color: Theme.of(context).colorScheme.background),
           SizedBox(
             child: BlocBuilder<AdminBloc, AdminState>(
             builder: (context, state) {
@@ -40,7 +40,7 @@ class CustomAdminDrawer extends StatelessWidget {
               );
             },
           )),
-          Expanded(child: Container(color: primaryColor)),
+          Expanded(child: Container(color: Theme.of(context).colorScheme.background)),
           const _BotonSalir()
         ]
       ),
@@ -55,14 +55,14 @@ class _AdminText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primaryColor,
+      color: Theme.of(context).colorScheme.background,
       height: 60,
       width: double.infinity,
-      child: const Text(
+      child:  Text(
         'ADMIN',
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.secondary,
           fontSize: 25,
           fontWeight: FontWeight.w400,
           letterSpacing: 1,
@@ -78,7 +78,7 @@ class _Image extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primaryColor,
+      color: Theme.of(context).colorScheme.background,
       width: 350,
       height: 200,
       child: Padding(
@@ -99,7 +99,6 @@ class _BotonSalir extends StatelessWidget {
       height: 50,
       color: Colors.redAccent,
       child: ListTile(
-        tileColor: primaryColor,
         onTap: () async{
           await user.signOut().then((value) {
             BlocProvider.of<AdminBloc>(context).state.view = const LogoView();

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/exercise.dart';
-import 'package:tu_gym_routine/pages/admin/add_exercise_page.dart';
 import 'package:tu_gym_routine/pages/pages.dart';
 import 'package:tu_gym_routine/services/exercise_service.dart';
 
@@ -13,14 +11,14 @@ class ListExerciseView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: secundaryColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         onPressed: () {
           Navigator.push(context,MaterialPageRoute(builder: (context) => const AddExercisePage()));
         },
-        child: const Icon(Icons.add, color: primaryColor, size: 30),
+        child: Icon(Icons.add, color: Theme.of(context).colorScheme.background, size: 30),
       ),
       body: Container(
-        color: primaryColor,
+        color: Theme.of(context).colorScheme.background,
         width: double.infinity,
         child: FutureBuilder<List<Exercise>>(
           future: getExercises(),
@@ -30,7 +28,7 @@ class ListExerciseView extends StatelessWidget {
             } else if (snapshot.hasError) { 
               return Text('Error: ${snapshot.error}',style: const TextStyle(color: Colors.white));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No hay ejercicios disponibles.',style: TextStyle(color: Colors.white),
+              return Center(child: Text('No hay ejercicios disponibles.',style: TextStyle(color: Theme.of(context).colorScheme.secondary),
               ));
             } else {
               return ExerciseListScreen(exercises: snapshot.data!);
@@ -83,14 +81,14 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
 
   void _filterExercises(String searchTerm) {
     setState(() {
-      filteredExercises = widget.exercises.where((exercise) => exercise.name.toLowerCase().contains(searchTerm.toLowerCase())).toList();
+      filteredExercises = widget.exercises.where((exercise) => exercise.name!.toLowerCase().contains(searchTerm.toLowerCase())).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
           Padding(
@@ -100,13 +98,13 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
               onChanged: (value) {
                 _filterExercises(value);
               },
-              style: const TextStyle(color: secundaryColor),
-              cursorColor: secundaryColor,
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: secundaryColor)),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              cursorColor: Theme.of(context).colorScheme.secondary,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
                 labelText: 'Buscar por nombre',
-                labelStyle: TextStyle(color: secundaryColor),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: secundaryColor)),
+                labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
               ),
             ),
           ),
@@ -120,8 +118,8 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
                   onTap: () {
                     Navigator.push(context,MaterialPageRoute(builder: (context) => ExercisePage(exercise: filteredExercises[index])));
                   },
-                  title: Text(filteredExercises[index].name,style: const TextStyle(fontWeight: FontWeight.bold, color: secundaryColor)),
-                  subtitle: Text(filteredExercises[index].muscle,style: const TextStyle(fontWeight: FontWeight.w100, color: secundaryColor),maxLines: 2),
+                  title: Text(filteredExercises[index].name!,style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
+                  subtitle: Text(filteredExercises[index].muscle!,style: TextStyle(fontWeight: FontWeight.w100, color: Theme.of(context).colorScheme.secondary),maxLines: 2),
                   leading: Image.asset(
                     'assets/foto_login.png',
                     alignment: Alignment.center,

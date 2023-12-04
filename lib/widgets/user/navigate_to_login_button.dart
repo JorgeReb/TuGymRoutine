@@ -12,11 +12,11 @@ class NavigateToLoginButton extends StatelessWidget {
       onPressed: () => Navigator.pushNamed(context, "/"),
       style: const ButtonStyle(
         side: MaterialStatePropertyAll(BorderSide.none)),
-      child: const Text(
+      child: Text(
         '¿Ya tienes cuenta?',
         style: TextStyle(
           decoration: TextDecoration.underline,
-          color: Colors.white70,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );

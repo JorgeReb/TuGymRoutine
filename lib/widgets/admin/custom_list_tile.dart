@@ -10,17 +10,17 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      tileColor: const Color.fromARGB(255, 34, 34, 34),
+      tileColor: Theme.of(context).colorScheme.background,
       onTap: onTap,
       title: Text(title,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
           fontSize: 20,
           fontWeight: FontWeight.w300,
         ),
         textAlign: TextAlign.left
       ),
-      leading: Icon(icon, color: Colors.white, size: 20),
+      leading: Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 20),
     );
   }
 }

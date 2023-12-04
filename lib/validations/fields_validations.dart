@@ -80,3 +80,12 @@ String? validateUpdateInputsExercise(String? value) {
   } 
   return null;
 }
+
+String? validateNumber(String? value) {
+  if (value!.isEmpty) {
+    return "El campo es obligatorio";
+  } else if (int.parse(value) < 1 ||  int.parse(value) > 10 ) {
+    return "El número de ejercicios debe estar comprendido entre 1 y 10";
+  } 
+  return null;
+}

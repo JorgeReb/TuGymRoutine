@@ -8,7 +8,7 @@ class FormLabelInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text(name, textAlign: TextAlign.left, style: const TextStyle(fontSize: 12))
+      child: Text(name, textAlign: TextAlign.left, style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.background))
     );
   }
 }

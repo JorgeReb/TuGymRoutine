@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tu_gym_routine/blocs/admin/admin_bloc.dart';
-import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
 class AdminPage extends StatefulWidget {
@@ -21,17 +20,17 @@ class _AdminPageState extends State<AdminPage> {
     return Scaffold(
       drawer: const CustomAdminDrawer(),
       appBar: AppBar(
-        title: const Text('Dashboard'),
-        backgroundColor: primaryColor,
+        title: Text('Dashboard', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+        backgroundColor: Theme.of(context).colorScheme.background,
+          surfaceTintColor: Theme.of(context).colorScheme.background,
+        shadowColor: Theme.of(context).colorScheme.background,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
         elevation: 10,
         actions: [
+          Text('${user!.email}',style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),textAlign: TextAlign.center),
           Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Text('${user!.email}',style: const TextStyle(fontSize: 15),textAlign: TextAlign.center,),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Icon(Icons.account_circle_rounded,size: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Icon(Icons.account_circle_rounded,size: 30, color: Theme.of(context).colorScheme.secondary,),
           )
         ],
       ),

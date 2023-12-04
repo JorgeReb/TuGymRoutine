@@ -35,12 +35,12 @@ class SocialNetworkButton extends StatelessWidget {
           shadowColor: const MaterialStatePropertyAll(Colors.transparent),
           shape: MaterialStateProperty.all(const CircleBorder()),
           padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-          backgroundColor: MaterialStateProperty.all(
-              const Color.fromARGB(255, 34, 34, 34)), // <-- Button color
+          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background), 
+          surfaceTintColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background)
         ),
         child: Icon(
           socialNetworkIcon,
-          color: Colors.white38,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );

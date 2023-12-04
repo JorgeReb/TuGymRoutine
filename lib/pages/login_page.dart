@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 34, 34, 34),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -78,7 +78,7 @@ class _LoginFormState extends State<_LoginForm> {
             onPressed: () async {
               if (loginFormKey.currentState!.validate()) await loginUser();
             },
-            child: const Text('Iniciar sesión')
+            child: const Text('Iniciar sesión', style: TextStyle(color: Colors.white),)
           ),
           const SizedBox(height: 20),
           const NavigateToRegisterButton(),
@@ -89,7 +89,7 @@ class _LoginFormState extends State<_LoginForm> {
     );
   }
 
-  Future<void> loginUser() async {
+  Future<void> loginUser() async {  
     try {
       final authData = await auth.signInWithEmailAndPassword(email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
       IdTokenResult result = await authData.user!.getIdTokenResult();
@@ -112,7 +112,7 @@ class _LoginFormState extends State<_LoginForm> {
             textButton: TextButton(onPressed: () => Navigator.pop(context), child: cancelText),
           ).showCustomDialog(context);
         break;
-        case "user-not-found":
+        case "user-not-found":         
           CustomAlertDialog(
             icon: alertIcon,
             text: invalidEmailText,
@@ -129,6 +129,14 @@ class _LoginFormState extends State<_LoginForm> {
           ).showCustomDialog(context);
         break;
         case "INVALID_LOGIN_CREDENTIALS":
+          CustomAlertDialog(
+            icon: alertIcon,
+            text: invalidEmailText,
+            color: alertColor,
+            textButton: TextButton(onPressed: () => Navigator.pop(context), child: cancelText),
+          ).showCustomDialog(context);
+        break;
+        case "invalid-credential":
           CustomAlertDialog(
             icon: alertIcon,
             text: invalidEmailText,

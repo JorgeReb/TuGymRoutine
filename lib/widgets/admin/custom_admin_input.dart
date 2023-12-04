@@ -23,7 +23,7 @@ class CustomAdminInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: const TextStyle(color: primaryColor,fontSize: 12),
+      style: TextStyle(color: Theme.of(context).colorScheme.background,fontSize: 12),
       controller: controller,
       cursorColor: primaryColor,
       validator: validator,
@@ -34,9 +34,9 @@ class CustomAdminInputField extends StatelessWidget {
         errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withOpacity(0.6))),
         suffixIcon: Padding(padding: const EdgeInsets.only(left: 10, top: 20), child: icon),
         labelText: label,
-        labelStyle: const TextStyle(color: primaryColor, fontSize: 15),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 1,color: primaryColor,)),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 1,color: primaryColor,)),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.background, fontSize: 15),
+        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 1,color: Theme.of(context).colorScheme.background,)),
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 1,color: Theme.of(context).colorScheme.background,)),
       ),
     );
   }

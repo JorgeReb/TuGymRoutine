@@ -1,3 +1,4 @@
+export 'package:tu_gym_routine/widgets/user/create_routine/custom_routine_input.dart';
 export 'package:tu_gym_routine/widgets/admin/custom_admin_input.dart';
 export 'package:tu_gym_routine/widgets/admin/is_admin_button_widget.dart';
 export 'package:tu_gym_routine/widgets/admin/user_actions_buttons.dart';

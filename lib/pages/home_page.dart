@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final User? currentUser = FirebaseAuth.instance.currentUser;
-   Usuario? user;
+  Usuario? user;
 
   @override
   void initState() {
@@ -35,10 +35,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TuGymRoutine',style: TextStyle(color: secundaryColor)),
-        backgroundColor: primaryColor,
+        title: Text('TuGymRoutine',style: TextStyle(color: theme.colorScheme.secondary)),
+        backgroundColor: theme.colorScheme.background,
+        surfaceTintColor: theme.colorScheme.background,
+        shadowColor: theme.colorScheme.background,
+        iconTheme: IconThemeData(color:Theme.of(context).colorScheme.secondary),
         elevation: 10,
         actions: [
           FutureBuilder<Usuario>(
@@ -53,12 +57,12 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       userName,
-                      style: const TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15, color: theme.colorScheme.secondary),
                       textAlign: TextAlign.center,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Icon(Icons.account_circle_rounded, size: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Icon(Icons.account_circle_rounded, size: 30, color: theme.colorScheme.secondary),
                     ),
                   ],
                 );
@@ -74,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         return userState.view!;
       },
     ),
-    backgroundColor: const Color.fromARGB(255, 34, 34, 34),
+    backgroundColor: primaryColor,
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tu_gym_routine/blocs/user/user_bloc.dart';
-import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
 import 'package:tu_gym_routine/views/views.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
@@ -18,13 +17,13 @@ class CustomUserDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Drawer(
       width: 250,
       child: Column(
         children: [
           const _Image(),
           _UserText(user: user),
-          Container(height: 20,color: primaryColor),
           SizedBox(
             child: BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
@@ -33,7 +32,7 @@ class CustomUserDrawer extends StatelessWidget {
                   CustomListTile(
                     title: 'Crear rutina',
                     icon: FontAwesomeIcons.notesMedical,
-                    onTap: () => BlocProvider.of<UserBloc>(context).add(ChangeViewUserEvent(view: const ListUserView()))
+                    onTap: () => BlocProvider.of<UserBloc>(context).add(ChangeViewUserEvent(view: const CreateRoutineView()))
                   ),
                   CustomListTile(
                     title: 'Ver ejercicios',
@@ -43,12 +42,12 @@ class CustomUserDrawer extends StatelessWidget {
                   CustomListTile(
                     title: 'Entrenamientos',
                     icon: FontAwesomeIcons.dumbbell,
-                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const ListExerciseView()))
+                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const WorkoutsView()))
                   ),
                   CustomListTile(
                     title: 'Mis rutinas',
                     icon: Icons.calendar_today ,
-                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const ListExerciseView()))
+                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const LogoView()))
                   ),
                   CustomListTile(
                     title: 'Perfil',
@@ -58,13 +57,13 @@ class CustomUserDrawer extends StatelessWidget {
                   CustomListTile(
                     title: 'Ajustes',
                     icon: Icons.settings,
-                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const ListExerciseView()))
+                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const SettingsView()))
                   ),
                 ],
               );
             },
           )),
-          Expanded(child: Container(color: primaryColor)),
+          Expanded(child: Container(color: theme.colorScheme.background)),
           const _BotonSalir()
         ],
       ),
@@ -80,14 +79,14 @@ class _UserText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primaryColor,
+      color: Theme.of(context).colorScheme.background,
       height: 60,
       width: double.infinity,
       child:  Text(
         user.name.toUpperCase(),
         textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
           fontSize: 25,
           fontWeight: FontWeight.w400,
           letterSpacing: 1,
@@ -103,7 +102,7 @@ class _Image extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primaryColor,
+      color: Theme.of(context).colorScheme.background,
       width: 350,
       height: 200,
       child: Padding(
@@ -124,7 +123,6 @@ class _BotonSalir extends StatelessWidget {
       height: 50,
       color: Colors.redAccent,
       child: ListTile(
-        tileColor: primaryColor,
         onTap: () async{
           await user.signOut().then((value) {
             BlocProvider.of<UserBloc>(context).state.view = const LogoView();

@@ -1,26 +1,30 @@
 import 'dart:convert';
 
 class Exercise {
-  final String exerciseId;
-  final String name;
-  final String description;
-  final String type;
-  final String muscle;
-  final String image;
-  final String equipment;
-  final String difficulty;
-  final String objective;
+  late final String exerciseId;
+  String? name;
+  String? description;
+  String? type;
+  String? muscle;
+  String? image;
+  String? equipment;
+  String? difficulty;
+  String? objective;
+  int? series;
+  int? repetitions;
 
   Exercise({
     required this.exerciseId,
-    required this.name, 
-    required this.description, 
-    required this.type, 
-    required this.muscle, 
-    required this.image, 
-    required this.equipment, 
-    required this.difficulty, 
-    required this.objective
+    this.name, 
+    this.description, 
+    this.type, 
+    this.muscle, 
+    this.image, 
+    this.equipment, 
+    this.difficulty, 
+    this.objective,
+    this.series,
+    this.repetitions,
   });
 
   Exercise copyWith({
@@ -33,6 +37,8 @@ class Exercise {
     String? equipment,
     String? difficulty,
     String? objective,
+    int? series,
+    int? repetitions,
   }){
     return Exercise(
       exerciseId: exerciseId ?? this.exerciseId,
@@ -43,7 +49,9 @@ class Exercise {
       image: image ?? this.image, 
       equipment: equipment ?? this.equipment, 
       difficulty: difficulty ?? this.difficulty, 
-      objective: objective ?? this.objective
+      objective: objective ?? this.objective,
+      series: series ?? this.series,
+      repetitions: repetitions ?? this.repetitions,
     );
   }
 
@@ -52,26 +60,33 @@ class Exercise {
   String toJson() => json.encode(toMap());
 
   factory Exercise.fromMap(Map<String, dynamic> json) => Exercise(
-    exerciseId: json["exerciseId"],
-    name: json["name"],
-    description: json["description"],
-    type: json["type"],
-    muscle: json["muscle"],
-    image: json["image"],
-    equipment: json["equipment"],
-    difficulty: json["difficulty"],
-    objective: json["objective"]
+    exerciseId: json["exerciseId"] ?? '',
+    name: json["name"] ?? '',
+    description: json["description"] ?? '',
+    type: json["type"] ?? '',
+    muscle: json["muscle"] ?? '',
+    image: json["image"] ?? '',
+    equipment: json["equipment"] ?? '',
+    difficulty: json["difficulty"] ?? '',
+    objective: json["objective"] ?? '',
+    series: json["series"] ?? 0,
+    repetitions: json["repetitions"] ?? 0,
   );
 
   Map<String, dynamic> toMap() => {
     "exerciseId" : exerciseId,
-    "name": name,
-    "description": description,
-    "type": type,
-    "muscle": muscle,
-    "image": image,
-    "equipment": equipment,
-    "difficulty": difficulty,
-    "objective": objective
+    "name": name ?? '',
+    "description": description ?? '',
+    "type": type ?? '',
+    "muscle": muscle ?? '',
+    "image": image ?? '',
+    "equipment": equipment ?? '',
+    "difficulty": difficulty ?? '',
+    "objective": objective ?? '',
+    "series": series ?? 0,
+    "repetitions": repetitions ?? 0,
   };
+
+    
+
 }
