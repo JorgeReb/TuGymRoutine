@@ -7,9 +7,9 @@ import 'package:tu_gym_routine/models/exercise.dart';
 
 class ListExercises extends StatefulWidget {
   final List<Exercise> exercises;
-  final void Function(String, String) returnExercise;
+  final void Function(String) returnExerciseId;
 
-  const ListExercises({super.key, required this.exercises, required this.returnExercise});
+  const ListExercises({super.key, required this.exercises, required this.returnExerciseId});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -68,7 +68,7 @@ class _ListExercisesState extends State<ListExercises> {
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
-                    widget.returnExercise(filteredExercises[index].exerciseId, filteredExercises[index].name!);
+                    widget.returnExerciseId(filteredExercises[index].id);
                     context.read<RoutineBloc>().add(ChangeEnabledInputsRoutine(isChooseExercise: false, isExerciseChosen: true, isShowExercise: false));
                   },
                   title: Text(filteredExercises[index].name!,style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.secondary)),

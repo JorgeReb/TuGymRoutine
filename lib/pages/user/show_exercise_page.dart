@@ -1,12 +1,17 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tu_gym_routine/constants/constants.dart';
 import 'package:tu_gym_routine/models/exercise.dart';
+import 'package:tu_gym_routine/models/usuario.dart';
+import 'package:tu_gym_routine/services/user_service.dart';
 
 class ShowExercisePage extends StatefulWidget {
   final Exercise exercise;
+  
   const ShowExercisePage({super.key, required this.exercise});
 
   @override
@@ -14,6 +19,27 @@ class ShowExercisePage extends StatefulWidget {
 }
 
 class _ShowExercisePageState extends State<ShowExercisePage> {
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+  late Usuario user;
+  bool isFavorite = false;
+  bool isCurrentlyFavorite = false;
+
+  @override
+  void initState() {
+    _cargarUsuarioDesdeBD();
+    getImageFS();
+    checkIfExerciseIsFavorite();
+    super.initState();
+  }
+
+   Future<void> _cargarUsuarioDesdeBD() async {
+    Usuario userDb = await UserService().getUserById(currentUser!.uid);
+    setState(() {
+      user = userDb;
+    });
+  }
+
+
   Future<String> getImageFS() async {
     try {
       final storageRef = FirebaseStorage.instance.ref().child(widget.exercise.image!);
@@ -26,15 +52,40 @@ class _ShowExercisePageState extends State<ShowExercisePage> {
     }
   }
 
-  @override
-  void initState() {
-    getImageFS();
-    super.initState();
+   void checkIfExerciseIsFavorite() async {
+    final userRef = FirebaseFirestore.instance.collection('users').doc(currentUser!.uid);
+
+    final userDoc = await userRef.get();
+
+     
+    setState(() {
+      isCurrentlyFavorite = (userDoc['favorites_exercises'] as List).contains(widget.exercise.id);
+    });
+       
   }
+
+  void toggleFavoriteStatus(String exerciseId) async{
+    final userUid = user.id;
+
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userUid); 
+  
+    await userRef.update({
+      'favorites_exercises': isCurrentlyFavorite
+          ? FieldValue.arrayRemove([exerciseId])
+          : FieldValue.arrayUnion([exerciseId]),
+    });
+
+    setState(() {
+        isCurrentlyFavorite = !isCurrentlyFavorite;
+    });
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
     const imageBackgroundColor = primaryColor;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: FadeInDown(
@@ -45,7 +96,7 @@ class _ShowExercisePageState extends State<ShowExercisePage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Padding(
-                    padding: EdgeInsets.only(top: 50),
+                    padding: EdgeInsets.only(top: 100),
                     child: Center(child: CircularProgressIndicator()));
                 } else {
                   final image = snapshot.data!;
@@ -66,18 +117,36 @@ class _ShowExercisePageState extends State<ShowExercisePage> {
                                       'assets/foto_nombre.png',
                                       alignment: Alignment.center,
                                     )),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, top: 40),
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.white,
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10, top: 40),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    // Navegar a la página anterior al presionar el botón
+                                    Navigator.pop(context);
+                                  },
+                                ),
                               ),
-                              onPressed: () {
-                                // Navegar a la página anterior al presionar el botón
-                                Navigator.pop(context);
-                              },
-                            ),
+                               Padding(
+                                padding: const EdgeInsets.only(left: 260, top: 40),
+                                child: IconButton(
+                                  icon: Icon(
+                                    isCurrentlyFavorite ? Icons.star :  Icons.star_border,
+                                    color: Colors.yellow[600],
+                                    size: 35,
+                                  ),
+                                  onPressed: () {
+                                    // Navegar a la página anterior al presionar el botón
+                                    toggleFavoriteStatus(widget.exercise.id);
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

@@ -14,6 +14,21 @@ class ExerciseService {
 
     for (var document in queryExercise.docs) {
       final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      final Exercise exercise = Exercise.fromMap({'id': document.id, ...data});
+      exercises.add(exercise);
+    }
+    return exercises;
+  }
+
+  
+  getExercisesByIds(List<String> exercisesIds) async {
+
+    QuerySnapshot queryExercise = await collectionReferenceExercise.where(FieldPath.documentId, whereIn: exercisesIds).get(); 
+
+    final List<Exercise> exercises = [];
+
+    for (var document in queryExercise.docs) {
+      final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
       final Exercise exercise = Exercise.fromMap({'exerciseId': document.id, ...data});
       exercises.add(exercise);
     }
@@ -33,14 +48,12 @@ class ExerciseService {
         return null;
       }
     }
-
-      return workouts;
+    return workouts;
   }
 
   addWorkout(Workout workout)async{
     try{
       final Map<String, dynamic> workoutConverted = workout.toMap();
-      
       await FirebaseFirestore.instance.collection('workouts').doc().set(workoutConverted);
 
       return{"succes" : true};

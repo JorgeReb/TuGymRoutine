@@ -44,7 +44,7 @@ class ListExerciseView extends StatelessWidget {
 
     final List<Exercise> exerciseList = exercises.map((exercise) {
       return Exercise(
-        exerciseId: exercise.exerciseId,
+        id: exercise.id,
         name: exercise.name,
         description: exercise.description,
         type: exercise.type,

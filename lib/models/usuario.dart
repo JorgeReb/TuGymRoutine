@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tu_gym_routine/models/exercise.dart';
 
 class Usuario {
   final String id;
@@ -8,6 +9,7 @@ class Usuario {
   final String email;
   final double weight;
   final double height;
+  List<Exercise>? favoritesExercises;
 
   Usuario({
     required this.id,
@@ -15,6 +17,7 @@ class Usuario {
     required this.email,
     required this.weight,
     required this.height,
+    this.favoritesExercises,
   });
 
   Usuario copyWith({
@@ -22,7 +25,8 @@ class Usuario {
     String? name,
     String? email,
     double? weight,
-    double? height
+    double? height,
+    List<Exercise>? favoritesExercises
   }) {
     return Usuario(
       id: id ?? this.id, 
@@ -30,6 +34,7 @@ class Usuario {
       email: email ?? this.email, 
       weight: weight ?? this.weight, 
       height: height ?? this.height,     
+      favoritesExercises: favoritesExercises ?? this.favoritesExercises,     
     );
   }
 
@@ -43,13 +48,15 @@ class Usuario {
     email: json["email"],
     weight: json["weight"] ?? 0,
     height: json["height"] ?? 0,
+    favoritesExercises: json["favoritesExercises"] ?? [],
   );
 
   Map<String, dynamic> toMap() => {
     "name": name,
     "email": email,
     "weight": weight,
-    "height": height
+    "height": height,
+    "favoritesExercises": favoritesExercises,
   };
 
     factory Usuario.fromDocumentSnapshot(DocumentSnapshot snapshot) {
@@ -60,6 +67,7 @@ class Usuario {
       email: data['email'] ?? '',
       weight: data['weight'] ?? 0,
       height: data['height'] ?? 0,
+      favoritesExercises: data['favoritesExercises'] ?? [],
     );
   }
 }

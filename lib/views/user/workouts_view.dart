@@ -1,10 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tu_gym_routine/blocs/user/user_bloc.dart';
-import 'package:tu_gym_routine/models/exercise.dart';
 import 'package:tu_gym_routine/models/workout.dart';
 import 'package:tu_gym_routine/pages/home_page.dart';
+import 'package:tu_gym_routine/pages/user/routine_page.dart';
 import 'package:tu_gym_routine/services/exercise_service.dart';
 import 'package:tu_gym_routine/views/logo_view.dart';
 
@@ -36,22 +37,14 @@ class WorkoutsView extends StatelessWidget {
                         children: [
                           ListTile(
                             title: Text(workout[index].name!,style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
+                            subtitle: Text(workout[index].description!,style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w200)),
+                            minVerticalPadding: 20,
+                            leading: Icon(FontAwesomeIcons.dumbbell, color: Theme.of(context).colorScheme.secondary, size: 20),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => RoutinePage(workout: workout[index])));
+                            },
                           ),
-                          ...workout[index].exercises!.entries.map((e) {
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 20, bottom: 5),
-                              child: Row( 
-                                children: [
-                                  Text("${e.key}: ",style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
-                                  Text("${e.value.name}  ",style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
-                                  Text(" ${e.value.series} x ${e.value.repetitions} ",style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
-                                ],
-                              )
-                            );
-                           
-                          }
-                        ),
-                        const SizedBox(height: 15),
+                      
                         Divider(height: 1, color: Theme.of(context).colorScheme.secondary,)
                         ],
                       );

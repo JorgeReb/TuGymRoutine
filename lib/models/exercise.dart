@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+
 class Exercise {
-  late final String exerciseId;
+  late final String id;
   String? name;
   String? description;
   String? type;
@@ -13,8 +14,9 @@ class Exercise {
   int? series;
   int? repetitions;
 
+
   Exercise({
-    required this.exerciseId,
+    required this.id,
     this.name, 
     this.description, 
     this.type, 
@@ -28,7 +30,7 @@ class Exercise {
   });
 
   Exercise copyWith({
-    String? exerciseId,
+    String? id,
     String? name,
     String? description,
     String? type,
@@ -41,7 +43,7 @@ class Exercise {
     int? repetitions,
   }){
     return Exercise(
-      exerciseId: exerciseId ?? this.exerciseId,
+      id: id ?? this.id,
       name: name ?? this.name, 
       description: description ?? this.description, 
       type: type ?? this.type,
@@ -60,7 +62,7 @@ class Exercise {
   String toJson() => json.encode(toMap());
 
   factory Exercise.fromMap(Map<String, dynamic> json) => Exercise(
-    exerciseId: json["exerciseId"] ?? '',
+    id: json["id"] ?? '',
     name: json["name"] ?? '',
     description: json["description"] ?? '',
     type: json["type"] ?? '',
@@ -74,7 +76,7 @@ class Exercise {
   );
 
   Map<String, dynamic> toMap() => {
-    "exerciseId" : exerciseId,
+    "id" : id,
     "name": name ?? '',
     "description": description ?? '',
     "type": type ?? '',
@@ -85,6 +87,7 @@ class Exercise {
     "objective": objective ?? '',
     "series": series ?? 0,
     "repetitions": repetitions ?? 0,
+
   };
 
     

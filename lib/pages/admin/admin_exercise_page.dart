@@ -293,7 +293,7 @@ class _FormExerciseState extends State<_FormExercise> {
               try {
                 if (imageValue == auxImage) imageValue = auxImage;
                 await ExerciseService().updateExercise(
-                    widget.exercise.exerciseId,
+                    widget.exercise.id,
                     nameCtrl.text,
                     descriptionCtrl.text,
                     typeValue,
@@ -548,7 +548,7 @@ class _ActionsButtons extends StatelessWidget {
               onPressed: () async {
                 isSure = true;
                 if (isSure == true) {
-                  await ExerciseService().deleteExercise(exercise.exerciseId);
+                  await ExerciseService().deleteExercise(exercise.id);
 
                   BlocProvider.of<AdminBloc>(context)
                       .add(ChangeViewEvent(view: const ListExerciseView()));

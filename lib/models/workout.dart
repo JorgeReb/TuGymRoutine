@@ -4,22 +4,26 @@ import 'package:tu_gym_routine/models/exercise.dart';
 
 class Workout {
   String? name;
+  String? description;
   int? numberOfExercises = 0;
   Map<int, Exercise>? exercises = {};
  
   Workout({
     this.name, 
+    this.description, 
     this.numberOfExercises, 
     this.exercises, 
   });
 
   Workout copyWith({
     String? name,
+    String? description,
     int? numberOfExercises,
     Map<int, Exercise>? exercises,
   }){
     return Workout(
       name: name ?? this.name, 
+      description: description ?? this.description, 
       numberOfExercises: numberOfExercises ?? this.numberOfExercises, 
       exercises: exercises ?? this.exercises,
     );
@@ -40,6 +44,7 @@ class Workout {
 
     return Workout(
       name: json["name"] ?? '',
+      description: json["description"] ?? '',
       numberOfExercises: json["number_of_exercises"] ?? 0,
       exercises: exerciseList,
   );
@@ -53,7 +58,7 @@ class Workout {
     for (int i = 1; i < exercises!.length+1; i++) {
        exerciseMap = {...exerciseMap,
         i.toString():{
-          "name": exercises![i]!.name,
+          "id": exercises![i]!.id,
           "series": exercises![i]!.series,
           "repetitions": exercises![i]!.repetitions,
         }
@@ -62,6 +67,7 @@ class Workout {
    
     final workoutConverted = {
       "name": name,
+      "description": description,
       "numberOfExercises": numberOfExercises,
       "exercises": exerciseMap,
     };

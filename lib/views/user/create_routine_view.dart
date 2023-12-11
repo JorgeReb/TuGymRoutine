@@ -25,7 +25,6 @@ class _CreateRoutineViewState extends State<CreateRoutineView> {
   @override
   Widget build(BuildContext context) {
     late String exerciseId;
-    late String exerciseName;
 
     final theme = Theme.of(context).colorScheme;
      final snackBar = SnackBar(
@@ -60,9 +59,8 @@ class _CreateRoutineViewState extends State<CreateRoutineView> {
                                 return Center(
                                   child: Text('No hay ejercicios disponibles.',style: TextStyle(color: Theme.of(context).colorScheme.secondary)));
                               } else {
-                                return ListExercises(exercises: snapshot.data!, returnExercise: (id, name) {
+                                return ListExercises(exercises: snapshot.data!, returnExerciseId: (id) {
                                   exerciseId = id;
-                                  exerciseName = name;
                                 });
                               }
                             }
@@ -82,10 +80,8 @@ class _CreateRoutineViewState extends State<CreateRoutineView> {
                                     exercises: {}
                                   );
                                 
-
-
-                                  
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  // ignore: await_only_futures
+                                  await ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   context.read<RoutineBloc>().add(ChangeEnabledInputsRoutine(isChooseExercise: true, isExerciseChosen: false, isShowExercise: false));
 
                                 },
@@ -95,7 +91,7 @@ class _CreateRoutineViewState extends State<CreateRoutineView> {
                           ],
                         ),
                     if (state.exercisesChoosen == true)  
-                    _Template(exerciseId: exerciseId, exerciseName: exerciseName),
+                    _Template(exerciseId: exerciseId),
                   ],
                 ),
               );
@@ -115,13 +111,23 @@ class _AddExercise extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   TextEditingController routineNameCtrl = TextEditingController();
+  TextEditingController routineDesciptionCtrl = TextEditingController();
+
     return Column(
       children: [
         CustomInputField(
-          nombreCampo: 'Nombre de la rutina',
-          icon: FontAwesomeIcons.fileSignature,
+          nombreCampo: 'Nombre',
+          icon: FontAwesomeIcons.solidPenToSquare,
           isObscureText: false,
           controller: routineNameCtrl,
+          validator: validateName
+        ),
+        const SizedBox(height: 20),
+        CustomInputField(
+          nombreCampo: 'Descripción',
+          icon: FontAwesomeIcons.fileSignature,
+          isObscureText: false,
+          controller: routineDesciptionCtrl,
           validator: validateName
         ),
         const SizedBox(height: 20),
@@ -130,6 +136,7 @@ class _AddExercise extends StatelessWidget {
           onPressed: () {
             if(createRoutineKey.currentState!.validate()){
               context.read<RoutineBloc>().state.workout!.name = routineNameCtrl.text;
+              context.read<RoutineBloc>().state.workout!.description = routineDesciptionCtrl.text;
               context.read<RoutineBloc>().add(ChangeEnabledInputsRoutine(isChooseExercise: false, isExerciseChosen: false, isShowExercise: true));
             }
           },
@@ -143,9 +150,8 @@ class _AddExercise extends StatelessWidget {
 // ignore: must_be_immutable
 class _Template extends StatefulWidget {
   late String exerciseId;
-  late String exerciseName;
 
-  _Template({required this.exerciseId, required this.exerciseName});
+  _Template({required this.exerciseId});
   
   @override
   State<_Template> createState() => _TemplateState();
@@ -175,9 +181,10 @@ class _TemplateState extends State<_Template> {
           child: TextButton(
             onPressed: () {
               context.read<RoutineBloc>().state.workout!.numberOfExercises = context.read<RoutineBloc>().state.workout!.numberOfExercises! + exerciseCont;
-
+              
               context.read<RoutineBloc>().state.workout!.exercises![context.read<RoutineBloc>().state.workout!.numberOfExercises!] = 
-              Exercise(exerciseId: widget.exerciseId, name: widget.exerciseName, series: int.parse(seriesCtrl.text), repetitions: int.parse(repetitionsCtrl.text));
+              Exercise(id: widget.exerciseId, series: int.parse(seriesCtrl.text), repetitions: int.parse(repetitionsCtrl.text));
+              
 
               setState(() {
                 seriesCtrl.text = '';
