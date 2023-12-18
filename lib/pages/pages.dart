@@ -1,5 +1,5 @@
+export 'package:tu_gym_routine/pages/user/exercise_progress.page.dart';
 export 'package:tu_gym_routine/pages/user/routine_page.dart';
-
 export 'package:tu_gym_routine/pages/user/change_password_page.dart';
 export 'package:tu_gym_routine/pages/admin/add_exercise_page.dart';
 export 'package:tu_gym_routine/pages/admin/admin_exercise_page.dart';

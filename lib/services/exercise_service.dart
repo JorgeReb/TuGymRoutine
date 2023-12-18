@@ -62,6 +62,22 @@ class ExerciseService {
     }
   }
 
+  addHistoryUserWorkouts(history) async {
+    try{
+      await FirebaseFirestore.instance.collection('history_user_workouts').add(history);
+
+      return{"succes" : true};
+      
+    } catch(e) {
+      return e;
+    }
+  }
+
+  getHistoryUserWorkoutsById(String id) {
+    final historyWorkouts = FirebaseFirestore.instance.collection('history_user_workouts').where("user_id", isEqualTo: id); 
+    return historyWorkouts;
+  }
+
   addExercise(
     String name,
     String description,
@@ -88,6 +104,8 @@ class ExerciseService {
       return e;
     }
   }
+
+  
 
   updateExercise(
     String exerciseId,

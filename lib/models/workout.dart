@@ -7,12 +7,14 @@ class Workout {
   String? description;
   int? numberOfExercises = 0;
   Map<int, Exercise>? exercises = {};
+  String? workoutId;
  
   Workout({
     this.name, 
     this.description, 
     this.numberOfExercises, 
     this.exercises, 
+    this.workoutId, 
   });
 
   Workout copyWith({
@@ -20,12 +22,14 @@ class Workout {
     String? description,
     int? numberOfExercises,
     Map<int, Exercise>? exercises,
+    String? workoutId
   }){
     return Workout(
       name: name ?? this.name, 
       description: description ?? this.description, 
       numberOfExercises: numberOfExercises ?? this.numberOfExercises, 
       exercises: exercises ?? this.exercises,
+      workoutId: workoutId ?? this.workoutId,
     );
   }
 
@@ -47,6 +51,7 @@ class Workout {
       description: json["description"] ?? '',
       numberOfExercises: json["number_of_exercises"] ?? 0,
       exercises: exerciseList,
+      workoutId: json["workoutId"],
   );
   }
 
@@ -70,6 +75,7 @@ class Workout {
       "description": description,
       "numberOfExercises": numberOfExercises,
       "exercises": exerciseMap,
+      "workoutId": workoutId,
     };
     return workoutConverted;
   }

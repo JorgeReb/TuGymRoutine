@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tu_gym_routine/models/exercise.dart';
 import 'package:tu_gym_routine/models/workout.dart';
+import 'package:tu_gym_routine/pages/pages.dart';
 import 'package:tu_gym_routine/services/exercise_service.dart';
 
 // ignore: must_be_immutable
@@ -33,12 +32,12 @@ class RoutinePage extends StatelessWidget {
           } else {
             final List<Exercise> exercises = snapshot.data;
             return Stack(
-              children: [                
+              children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0),
                   child: ListView.builder(
                     itemCount: exercises.length,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (context, index) {                      
                       return Column(
                         children: [
                           ListTile(
@@ -72,14 +71,30 @@ class RoutinePage extends StatelessWidget {
                           Divider(
                             height: 1,
                             color: Theme.of(context).colorScheme.secondary,
-                          )
+                          ),
+                          if (index+1 == exercises.length) 
+                            Padding(
+                              padding: const EdgeInsets.only(top: 25.0),
+                              child: TextButton(
+                                style: const ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                                  fixedSize: MaterialStatePropertyAll(Size(300, 30))
+                                ),
+                                onPressed: () {
+                                  Navigator.push(context,MaterialPageRoute(builder: (context) => ExerciseProgressPage(workout: workout, exercises: exercises,)));
+                                },
+                                child: Text('Iniciar entrenamiento', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                              ),
+                            )
+                          
                         ],
                       );
                     },
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 25.0),
                   child: IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios,
@@ -92,7 +107,6 @@ class RoutinePage extends StatelessWidget {
                   ),
                 ),
               ],
-              
             );
           }
         },

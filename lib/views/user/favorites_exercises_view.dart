@@ -3,10 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tu_gym_routine/models/exercise.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
-import 'package:tu_gym_routine/pages/home_page.dart';
-import 'package:tu_gym_routine/pages/user/show_exercise_page.dart';
 import 'package:tu_gym_routine/services/exercise_service.dart';
-import 'package:tu_gym_routine/views/user/exercises_view.dart';
 
 class FavoritesExercisesView extends StatefulWidget {
   final Usuario user;
