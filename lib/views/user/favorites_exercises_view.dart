@@ -18,7 +18,6 @@ class _FavoritesExercisesViewState extends State<FavoritesExercisesView> {
   @override
   void initState() {
     super.initState();
-    getExercisesId();
   }
 
   Future<List<Exercise>> getExercisesId() async {
@@ -46,40 +45,36 @@ class _FavoritesExercisesViewState extends State<FavoritesExercisesView> {
         delay: const Duration(milliseconds: 200),
         child: SingleChildScrollView(
           child: FutureBuilder(
-              future: getExercisesId(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Center(child: CircularProgressIndicator()));
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary));
-                } else {
-                  final List<Exercise> listExercises = snapshot.data!;
-                  return Container(
-                    height: 700,
-                    child: ListView.builder(
-                      itemCount: listExercises.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          minVerticalPadding: 10,
-
-                          title: Text(listExercises[index].name!,style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
-                          subtitle: Text(listExercises[index].muscle!,style: TextStyle(fontWeight: FontWeight.w100, color: Theme.of(context).colorScheme.secondary),maxLines: 2),
-                          leading: Image.asset(
-                            'assets/foto_login.png',
-                            alignment: Alignment.center,
-                            height: 30,
-                            width: 30,
-                          ),
-                        );
-                      }
-                    ),
-                  );
-                }
-              }),
+            future: getExercisesId(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(padding: EdgeInsets.only(top: 50),child: Center(child: CircularProgressIndicator()));
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}',style: TextStyle(color: Theme.of(context).colorScheme.secondary));
+              } else {
+                final List<Exercise> listExercises = snapshot.data!;
+                return SizedBox(
+                  height: 700,
+                  child: ListView.builder(
+                    itemCount: listExercises.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        minVerticalPadding: 10,
+                        title: Text(listExercises[index].name!,style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
+                        subtitle: Text(listExercises[index].muscle!,style: TextStyle(fontWeight: FontWeight.w100, color: Theme.of(context).colorScheme.secondary),maxLines: 2),
+                        leading: Image.asset(
+                          'assets/foto_login.png',
+                          alignment: Alignment.center,
+                          height: 30,
+                          width: 30,
+                        ),
+                      );
+                    }
+                  ),
+                );
+              }
+            }
+          ),
         ),
       ),
     );

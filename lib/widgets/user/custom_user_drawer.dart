@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:tu_gym_routine/blocs/user/user_bloc.dart';
 import 'package:tu_gym_routine/models/usuario.dart';
-import 'package:tu_gym_routine/views/user/favorites_exercises_view.dart';
 import 'package:tu_gym_routine/views/views.dart';
 import 'package:tu_gym_routine/widgets/widgets.dart';
 
@@ -48,7 +46,7 @@ class CustomUserDrawer extends StatelessWidget {
                   CustomListTile(
                     title: 'Mis rutinas',
                     icon: Icons.calendar_today ,
-                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const LogoView()))
+                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: HistoryUserWorkouts(user: user)))
                   ),
                   CustomListTile(
                     title: 'Ejercicios favoritos',
@@ -58,7 +56,7 @@ class CustomUserDrawer extends StatelessWidget {
                   CustomListTile(
                     title: 'Calendario',
                     icon: Icons.calendar_month ,
-                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const LogoView()))
+                    onTap: () => context.read<UserBloc>().add(ChangeViewUserEvent(view: const CalendarView()))
                   ),
                   CustomListTile(
                     title: 'Perfil',

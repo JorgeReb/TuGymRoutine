@@ -83,8 +83,9 @@ class _ExerciseProgressPageState extends State<ExerciseProgressPage> {
                             DataColumn(label: Text('Repeticiones',style: TextStyle(color: Theme.of(context).colorScheme.secondary))),
                           ],
                           rows: List.generate(exercises[indice].series!, (index) =>      
-                            DataRow(cells: [
-                               DataCell(Text("${index+1}", style: TextStyle(color: Theme.of(context).colorScheme.secondary),)),
+                            DataRow(
+                              cells: [
+                                DataCell(Text("${index+1}", style: TextStyle(color: Theme.of(context).colorScheme.secondary),)),
                                 DataCell(
                                   SizedBox(
                                     height: 40,
@@ -254,6 +255,7 @@ class _TimerState extends State<TimerWidget> {
                         "exercises":workoutMap,
                         "user_id": user!.id,
                         "workout_id": widget.workout.workoutId,
+                        "workout_name": widget.workout.name,
                         "time": _formatTime(seconds)
                         };
                         await ExerciseService().addHistoryUserWorkouts(data) ;

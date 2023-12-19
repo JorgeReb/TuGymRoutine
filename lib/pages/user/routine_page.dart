@@ -30,7 +30,7 @@ class RoutinePage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            final List<Exercise> exercises = snapshot.data;
+            final List<Exercise> exercises = snapshot.data!;
             return Stack(
               children: [
                 Padding(

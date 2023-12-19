@@ -51,6 +51,20 @@ class ExerciseService {
     return workouts;
   }
 
+
+  getWorkoutsById(List<String> workoutId) async {
+
+    QuerySnapshot queryExercise = await collectionReferenceExercise.where(FieldPath.documentId, whereIn: workoutId).get(); 
+
+    final List<Workout> workouts = [];
+
+    for (var document in queryExercise.docs) {
+      final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      final Workout workout = Workout.fromMap({'workoutId': document.id, ...data});
+      workouts.add(workout);
+    }
+    return workouts;
+  }
   addWorkout(Workout workout)async{
     try{
       final Map<String, dynamic> workoutConverted = workout.toMap();
@@ -73,9 +87,18 @@ class ExerciseService {
     }
   }
 
-  getHistoryUserWorkoutsById(String id) {
-    final historyWorkouts = FirebaseFirestore.instance.collection('history_user_workouts').where("user_id", isEqualTo: id); 
-    return historyWorkouts;
+  getHistoryUserWorkoutsById(String id) async{ 
+    try{
+      QuerySnapshot<Map<String, dynamic>> querySnapshot= await FirebaseFirestore.instance.collection('history_user_workouts').where("user_id", isEqualTo: id).get(); 
+        Map<String, dynamic> datos = {};
+        for (QueryDocumentSnapshot<Map<String, dynamic>> doc in querySnapshot.docs) {
+          datos[doc.id] = doc.data();
+        }
+
+        return datos;
+    } catch(e) {
+      return Error;
+    }
   }
 
   addExercise(
